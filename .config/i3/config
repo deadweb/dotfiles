@@ -1,10 +1,18 @@
 # i3 config file (v4)
 
-font pango:monospace 8
 set $mod Mod4
 
-# use Mouse+Mod1 to drag floating windows to their wanted position
-floating_modifier $mod
+set $refresh_i3status killall -SIGUSR1 i3status
+
+set $wallpaper $HOME/.config/i3/wallpaper_x220.png
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1: "
+set $ws2 "2: "
+set $ws3 "3: "
+set $ws4 "4: "
+set $ws5 "5: "
 
 # use these keys for focus, movement, and resize directions when reaching for
 # the arrows is not convenient
@@ -13,8 +21,67 @@ set $down j
 set $left h
 set $right l
 
-set $refresh_i3status killall -SIGUSR1 i3status
 
+### Colors / Кольори
+set $bg-color            #2D2D2D
+set $inactive-bg-color   #232323
+set $text-color          #DCDCDC
+set $inactive-text-color #7d7d7d
+set $urgent-bg-color     #D64937
+
+###########################
+
+font pango:monospace 0
+
+# use Mouse+Mod1 to drag floating windows to their wanted position
+floating_modifier $mod
+workspace_layout tabbed
+focus_follows_mouse no
+# default_border pixel 1
+hide_edge_borders smart
+
+# Hides window headers and borders.
+new_window 1pixel
+new_float normal
+
+floating_minimum_size 75 x 50
+floating_maximum_size 1343 x 725
+
+# Gaps
+smart_gaps on
+gaps inner 10
+#gaps outer 1
+
+#### / Налаштування кольорів вікон
+
+#                          border               background           text                 indicator        child_border
+client.focused             $inactive-text-color $inactive-text-color $text-color          $urgent-bg-color $inactive-text-color
+client.unfocused           $bg-color            $bg-color            $inactive-text-color $bg-color        $bg-color
+client.focused_inactive    $bg-color            $bg-color            $text-color          $bg-color        $bg-color
+client.urgent              $urgent-bg-color     $bg-color            $urgent-bg-color     $bg-color        $bg-color
+
+
+bar {
+    # Height in pixels
+    height 22
+    position top
+    separator_symbol " "
+    tray_output primary
+    workspace_buttons yes
+    strip_workspace_numbers yes
+    tray_padding 2
+    font pango:FontAwesome, Play 8
+    status_command i3blocks -c $HOME/.config/i3/i3blocks.conf
+    colors {
+      background $bg-color
+      separator  $inactive-text-color
+
+      #                  border             background         text
+      focused_workspace  $bg-color          $bg-color          $text-color
+      inactive_workspace $bg-color          $bg-color          $inactive-text-color
+      urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+   }
+}
 ###################################
 
 # Use pactl to adjust volume in PulseAudio.
@@ -81,13 +148,6 @@ bindsym $mod+Shift+grave mark 'alpha', move scratchpad
 bindsym $mod+grave [con_mark='alpha'] scratchpad show
 
 
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -149,16 +209,19 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-        status_command i3status
-}
+
 
 #######################################################################
-exec_always --no-startup-id kbdd & setxkbmap -option 'grp:alt_shift_toggle' -layout us,ua
-exec_always --no-startup-id udisks-glue -f
-exec_always --no-startup-id xinput set-int-prop 11 'Device Enable' 8 0
 
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id nm-applet
-exec --no-startup-id syncthing --no-console --no-browser
+exec_always --no-startup-id dunst
+exec_always --no-startup-id kbdd & setxkbmap -option 'grp:alt_shift_toggle' -layout us,ua
+exec_always --no-startup-id picom
+exec_always --no-startup-id udisks-glue -f
+exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
+
+exec --no-startup-id feh --bg-scale $wallpaper
 exec --no-startup-id keepassxc
+exec --no-startup-id nm-applet
+exec --no-startup-id schildichat-desktop
+exec --no-startup-id syncthing --no-console --no-browser
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork

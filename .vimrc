@@ -18,6 +18,7 @@ set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ї],фa,іs,вd,аf,пg,
 
 set iminsert=0
 set imsearch=0
+set noswapfile
 highlight lCursor guifg=NONE guibg=Cyan
 
 set encoding=utf-8 " кодування UTF-8
@@ -53,6 +54,7 @@ call plug#begin('~/.vim/plugged')
 
 " Plug 'itchyny/lightline.vim'
 Plug 'bling/vim-bufferline'
+Plug 'ap/vim-css-color'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'

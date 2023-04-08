@@ -2,9 +2,18 @@
 
 # Commands
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+alias install='sudo apt install'
+alias purge='sudo apt purge'
+alias reinstall='sudo apt install --reinstall'
+alias remove='sudo apt remove'
+alias update='sudo apt update'
+alias uu='sudo apt update && sudo apt upgrade'
+alias aremove='sudo apt autoremove'
+alias du='sudo apt dist-upgrade'
 
 ## Files
 alias aliases='vim ~/.config/aliases'
-alias i3conf='vim ~/.cinfig/i3/config'
+alias i3blocks='vim ~/.config/i3/i3blocks.conf'
+alias i3conf='vim ~/.config/i3/config'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
