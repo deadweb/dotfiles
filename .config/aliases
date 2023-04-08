@@ -1,0 +1,6 @@
+# Aliases
+
+alias zshrc='vim ~/.zshrc'
+alias vimrc='vim ~/.vimrc'
+alias i3conf='vim ~/.cinfig/i3/config'
+alias dotfiles='/usr/bin/git --git-dir=/home/user/.config/dotfiles/ --work-tree=/home/user'
