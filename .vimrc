@@ -46,7 +46,7 @@ set guioptions = "Відключаємо панелі прокрутки в GUI
 "Relativenumber - нумерацію рядків щодо положення курсора
 " set number relativenumber "А це гібридний варіант. Протестуйте все
 
-" au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 " au FileType vimwiki setlocal shiftwidth=6 noexpandtab
 
 " Plugin
@@ -63,7 +63,7 @@ Plug 'mattn/calendar-vim' " Календар
 Plug 'michal-h21/vim-zettel'
 Plug 'preservim/vim-markdown'
 Plug 'ryanoasis/vim-devicons' " іконки
-Plug 'tools-life/taskwiki' " інтеграція taskwarrior
+"Plug 'tools-life/taskwiki', { 'for': 'python' } " інтеграція taskwarrior
 Plug 'vim-airline/vim-airline' " статус-бар
 Plug 'vim-airline/vim-airline-themes' " теми статус-бару
 Plug 'vimwiki/vimwiki' " vimwiki

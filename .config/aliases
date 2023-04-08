@@ -10,6 +10,7 @@ alias update='sudo apt update'
 alias uu='sudo apt update && sudo apt upgrade'
 alias aremove='sudo apt autoremove'
 alias du='sudo apt dist-upgrade'
+alias vw='vim ~/Documents/wiki/index.md'
 
 ## Files
 alias aliases='vim ~/.config/aliases'

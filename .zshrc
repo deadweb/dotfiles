@@ -114,4 +114,4 @@ source $HOME/.config/aliases
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source /home/user/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /home/user/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
