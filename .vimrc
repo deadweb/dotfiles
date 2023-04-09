@@ -7,7 +7,9 @@ let g:mapleader="<"
 let g:XkbSwitchEnabled = 1 " перемикає клавіатуру для української
 let g:vimtex_view_method = 'zathura'
 "colorscheme base16-atlas
-let base16colorspace=256
+"let base16colorspace=256
+set t_Co=256
+autocmd BufWritePost ~/.Xresources !xrdb %
 
 " set number " вмикає нумерацію рядків
 " set relativenumber

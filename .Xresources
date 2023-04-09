@@ -3,41 +3,41 @@
 ! ------------------------------------------------------------------------------
 
 ! special
-xterm*foreground:   #DCDCDC
-xterm*background:   #2D2D2D
-xterm*cursorColor:  #DCDCDC
+foreground:   #DCDCDC
+background:   #2D2D2D
+cursorColor:  #DCDCDC
 
 ! black
-xterm*color0:       #333333
-xterm*color8:       #969896
+color0:       #333333
+color8:       #969896
 
 ! red
-xterm*color1:       #f0544c
-xterm*color9:       #f0544c
+color1:       #f0544c
+color9:       #f0544c
 
 ! green
-xterm*color2:       #5dba6f
-xterm*color10:      #5dba6f
+color2:       #5dba6f
+color10:      #5dba6f
 
 ! yellow
-xterm*color3:       #f6d756
-xterm*color11:      #f6d756
+color3:       #f6d756
+color11:      #f6d756
 
 ! blue
-xterm*color4:       #145eb8
-xterm*color12:      #145eb8
+color4:       #145eb8
+color12:      #145eb8
 
 ! magenta
-xterm*color5:       #ea76bb
-xterm*color13:      #ea76bb
+color5:       #ea76bb
+color13:      #ea76bb
 
 ! cyan
-xterm*color6:       #4cb6e5
-xterm*color14:      #4cb6e5
+color6:       #4cb6e5
+color14:      #4cb6e5
 
 ! white
-xterm*color7:       #DCDCDC
-xterm*color15:      #DCDCDC
+color7:       #DCDCDC
+color15:      #DCDCDC
 
 ! ------------------------------------------------------------------------------
 ! ROFI Color theme
