@@ -1,10 +1,13 @@
-"" Налаштування
+" Налаштування
 
 runtime! debian.vim
 syntax on
 
 let g:mapleader="<"
 let g:XkbSwitchEnabled = 1 " перемикає клавіатуру для української
+let g:vimtex_view_method = 'zathura'
+"colorscheme base16-atlas
+let base16colorspace=256
 
 " set number " вмикає нумерацію рядків
 " set relativenumber
@@ -39,7 +42,8 @@ set spelllang=uk
 set tabstop=3
 set wrap linebreak nolist " перенос слів
 
-set guifont=DroidSansMono\ Nerd\ Font:h16 " шрифт
+"set guifont=DroidSansMono\ Nerd\ Font:h16 " шрифт
+set guifont=Fura\ Code\ Light\ Nerd\ Font\ Complete:h16
 set guioptions = "Відключаємо панелі прокрутки в GUI
 " set showtabline = 0 "Відключаємо панель табів (віконця FTW)
 "Сам по собі number показує праворуч номера рядків
@@ -63,7 +67,7 @@ Plug 'mattn/calendar-vim' " Календар
 Plug 'michal-h21/vim-zettel'
 Plug 'preservim/vim-markdown'
 Plug 'ryanoasis/vim-devicons' " іконки
-"Plug 'tools-life/taskwiki', { 'for': 'python' } " інтеграція taskwarrior
+Plug 'tools-life/taskwiki' " інтеграція taskwarrior
 Plug 'vim-airline/vim-airline' " статус-бар
 Plug 'vim-airline/vim-airline-themes' " теми статус-бару
 Plug 'vimwiki/vimwiki' " vimwiki
@@ -124,7 +128,7 @@ map <C-l> <C-W>l
 set t_Co=256
 
 " fzf
-map <C-f> :Files<CR>
+map <C-f> :Files ~/Documents/wiki/<CR>
 map <S-f> :Rg<CR>
 
 
@@ -195,4 +199,4 @@ let g:airline#extensions#whitespace#enabled = 0 " вимикає показ пр
 nnoremap <C-S-tab> :bprevious<CR>
 nnoremap <C-tab>   :bnext<CR>
 
-let g:python3_host_prog = '~/.pyenv/versions/neovim3/bin/python'
+"let g:python3_host_prog = '~/.pyenv/versions/neovim3/bin/python'

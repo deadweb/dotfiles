@@ -1,0 +1,59 @@
+! ------------------------------------------------------------------------------
+! All Color theme
+! ------------------------------------------------------------------------------
+
+! special
+xterm*foreground:   #DCDCDC
+xterm*background:   #2D2D2D
+xterm*cursorColor:  #DCDCDC
+
+! black
+xterm*color0:       #333333
+xterm*color8:       #969896
+
+! red
+xterm*color1:       #f0544c
+xterm*color9:       #f0544c
+
+! green
+xterm*color2:       #5dba6f
+xterm*color10:      #5dba6f
+
+! yellow
+xterm*color3:       #f6d756
+xterm*color11:      #f6d756
+
+! blue
+xterm*color4:       #145eb8
+xterm*color12:      #145eb8
+
+! magenta
+xterm*color5:       #ea76bb
+xterm*color13:      #ea76bb
+
+! cyan
+xterm*color6:       #4cb6e5
+xterm*color14:      #4cb6e5
+
+! white
+xterm*color7:       #DCDCDC
+xterm*color15:      #DCDCDC
+
+! ------------------------------------------------------------------------------
+! ROFI Color theme
+! ------------------------------------------------------------------------------
+
+rofi.modi:          drun,run
+rofi.color-enabled: true
+!                   background   border    separator
+rofi.color-window:  #2D2D2D,     #7d7d7d,  #2D2D2D
+rofi.color-normal:  #2D2D2D,     #d8dee9,  #2D2D2D, #d8dee9, #2D2D2D
+rofi.color-active:  #2D2D2D,     #2D2D2D,  #2D2D2D, #2D2D2D, #d8dee9
+rofi.color-urgent:  #2D2D2D,     #f0544c,  #2D2D2D, #f0544c, #d8dee9
+
+!rofi.separator-style: solid
+!rofi.sidebar-mode:    true
+rofi.padding:         20
+rofi.bw:              1
+rofi.scrollbar-width: 0
+!rofi.line-margin:     0

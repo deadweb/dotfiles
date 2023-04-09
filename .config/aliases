@@ -14,6 +14,7 @@ alias vw='vim ~/Documents/wiki/index.md'
 
 ## Files
 alias aliases='vim ~/.config/aliases'
+alias sources='sudo vim /etc/apt/sources.list'
 alias i3blocks='vim ~/.config/i3/i3blocks.conf'
 alias i3conf='vim ~/.config/i3/config'
 alias vimrc='vim ~/.vimrc'
