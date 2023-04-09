@@ -207,12 +207,13 @@ bindsym $mod+t exec --no-startup-id ~/.local/bin/translate
 
 ####################################################################
 
+assign [class="SchildiChat"] $ws4
+assign [class='librewolf-default'] $ws2
+
 # Hide title
-for_window [class="^.*"] border pixel 1
-#for_window [class="i3-frame"] resize set 640 480, position center
-
-for_window [class="KeePassXC"] floating enable, move window to 550 250, move scratchpad, resize set 140 480
-
+for_window [class='^.*'] border pixel 1
+for_window [class='i3-frame'] resize set 640 480, position center
+for_window [class='KeePassXC'] floating enable, move window to 550 250, move scratchpad, resize set 140 480
 
 #######################################################################
 
