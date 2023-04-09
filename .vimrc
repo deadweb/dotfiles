@@ -44,8 +44,8 @@ set spelllang=uk
 set tabstop=3
 set wrap linebreak nolist " перенос слів
 
-"set guifont=DroidSansMono\ Nerd\ Font:h16 " шрифт
-set guifont=Fura\ Code\ Light\ Nerd\ Font\ Complete:h16
+"set guifont=Fira\ Code\ Light\ Nerd\ Font\ Complete:h16 " шрифт
+"set guifont=FiraCode\ Nerd\ Font\ Mono:h16
 set guioptions = "Відключаємо панелі прокрутки в GUI
 " set showtabline = 0 "Відключаємо панель табів (віконця FTW)
 "Сам по собі number показує праворуч номера рядків
