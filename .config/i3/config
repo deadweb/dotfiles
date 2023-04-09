@@ -1,5 +1,8 @@
 # i3 config file (v4)
 
+# Узнать клавишу xev
+### Distribution of windows on desktops (xprop - learn window class).
+
 set $mod Mod4
 
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -21,7 +24,6 @@ set $down j
 set $left h
 set $right l
 
-
 ### Colors / Кольори
 set $bg-color            #2D2D2D
 set $inactive-bg-color   #232323
@@ -41,7 +43,7 @@ focus_follows_mouse no
 hide_edge_borders smart
 
 # Hides window headers and borders.
-new_window 1pixel
+new_window pixel 1
 new_float normal
 
 floating_minimum_size 75 x 50
@@ -83,6 +85,7 @@ bar {
    }
 }
 ###################################
+
 bindsym --release Print exec scrot "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
 bindsym --release Shift+Print exec scrot -fs "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
 
@@ -149,8 +152,6 @@ bindsym $mod+a focus parent
 bindsym $mod+Shift+grave mark 'alpha', move scratchpad
 bindsym $mod+grave [con_mark='alpha'] scratchpad show
 
-
-
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
@@ -203,6 +204,15 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 
 bindsym $mod+t exec --no-startup-id ~/.local/bin/translate
+
+####################################################################
+
+# Hide title
+for_window [class="^.*"] border pixel 1
+#for_window [class="i3-frame"] resize set 640 480, position center
+
+for_window [class="KeePassXC"] floating enable, move window to 550 250, move scratchpad, resize set 140 480
+
 
 #######################################################################
 
