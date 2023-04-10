@@ -79,59 +79,6 @@ call plug#end()
 filetype on
 filetype plugin on
 
-" vimwiki
-let g:vimwiki_filetymes = ['vimwiki']
-" let g:vimwiki_filetypes = ['markdown'] " Нормально працює H1
-" let g:vimwiki_global_ext = 0
-
-" let g:vimwiki_list = [{'path': '~/Documents/wiki/',  'syntax': 'markdown', 'ext': '.md'}] "Використовувати в vimwiki формат Markdown за замовчуванням
-
-let g:vimwiki_list = [{'path':'~/Documents/wiki','ext':'.md','syntax':'markdown'}]
-
-     " let g:vimwiki_list = [{'path': '~/Documents/wiki',
-"                      \ 'syntax': 'markdown', 'ext': '.md'}]
-
-" let g:vimwiki_list = [{'path':'~/Documents/wiki/', 
-"                        \ 'template_path': '~/Documents/vimwiki/templates/',
-"                        \ 'template_default': 'def_template',
-"                        \ 'template_ext': '.tpl'}]
-
-let g:nv_search_paths = ['~/Documents/wiki/']
-" let g:vimwiki_listsyms = '✗○◐●✓' " чекбокси
-let g:vimwiki_list = [{'auto_diary_index': 1}] " автоматично генерує індекс щоденнику додаючі нові записи
-let g:vimwiki_diary_months = {
-         \ 1: 'Січень',
-         \ 2: 'Лютий',
-         \ 3: 'Березень',
-         \ 4: 'Квітень',
-         \ 5: 'Травень',
-         \ 6: 'Червень',
-         \ 7: 'Липень',
-         \ 8: 'Серпень',
-         \ 9: 'Вересень',
-         \ 10: 'Жовтень',
-         \ 11: 'Листопад',
-         \ 12: 'Грудень',
-         \ }
-" let g:vimwiki_ext2syntax = {'md':'markdown', '.markdown':'markdown'}
-" let g:vimwiki_markdown_link_ext = 1
-" let g:taskwiki_markdown_syntax = 'markdown'
-" let g:taskwiki_markdown_syntax = 'vimwiki'
-
-" mappings
-map <F5> :setlocal spell! spelllang=en_us<CR>
-map <F6> :setlocal spell! spelllang=uk<CR>
-map <C-t> :tabnew<CR>
-map <C-q> :tabclose<CR>
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-set t_Co=256
-
-" fzf
-map <C-f> :Files ~/Documents/wiki/<CR>
-map <S-f> :Rg<CR>
 
 
 " Виділити текст 
@@ -146,12 +93,6 @@ if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
 
-" Шаблон для записів щоденнику
-au BufNewFile ~/Documents/wiki/diary/*.md
-      \ call append(0,[
-      \ "# " . split(expand('%:r'),'/')[-1], "",
-      \ "## Зробити || +inbox",  "",
-      \ "## Нотатки", "" ])
 
 " open-browser.vim
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
@@ -201,4 +142,67 @@ let g:airline#extensions#whitespace#enabled = 0 " вимикає показ пр
 nnoremap <C-S-tab> :bprevious<CR>
 nnoremap <C-tab>   :bnext<CR>
 
-"let g:python3_host_prog = '~/.pyenv/versions/neovim3/bin/python'
+" VimWiki
+
+let g:vimwiki_filetymes = ['vimwiki']
+
+let g:vimwiki_list = [{'path':'~/Documents/wiki','ext':'.md','syntax':'markdown'}]
+
+" let g:vimwiki_list = [{'path': '~/Documents/wiki',
+"                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
+" let g:vimwiki_list = [{'path':'~/Documents/wiki/', 
+"                        \ 'template_path': '~/Documents/vimwiki/templates/',
+"                        \ 'template_default': 'def_template',
+"                        \ 'template_ext': '.tpl'}]
+
+let g:nv_search_paths = ['~/Documents/wiki/']
+" let g:vimwiki_listsyms = '✗○◐●✓' " чекбокси
+let g:vimwiki_list = [{'auto_diary_index': 1}] " автоматично генерує індекс щоденнику додаючі нові записи
+let g:vimwiki_diary_months = {
+         \ 1: 'Січень',
+         \ 2: 'Лютий',
+         \ 3: 'Березень',
+         \ 4: 'Квітень',
+         \ 5: 'Травень',
+         \ 6: 'Червень',
+         \ 7: 'Липень',
+         \ 8: 'Серпень',
+         \ 9: 'Вересень',
+         \ 10: 'Жовтень',
+         \ 11: 'Листопад',
+         \ 12: 'Грудень',
+         \ }
+" let g:vimwiki_ext2syntax = {'md':'markdown', '.markdown':'markdown'}
+" let g:vimwiki_markdown_link_ext = 1
+" let g:taskwiki_markdown_syntax = 'markdown'
+" let g:taskwiki_markdown_syntax = 'vimwiki'
+
+" mappings
+map <F5> :setlocal spell! spelllang=en_us<CR>
+map <F6> :setlocal spell! spelllang=uk<CR>
+map <C-t> :tabnew<CR>
+map <C-q> :tabclose<CR>
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+set t_Co=256
+
+" fzf
+map <C-f> :Files ~/Documents/wiki/<CR>
+map <S-f> :Rg<CR>
+
+" Шаблон для записів
+au BufNewFile ~/Documents/wiki/*.md
+      \ call append(0,[
+      \ "# " . split(expand('%:r'),'/')[-1], "",
+      \ "## Посилання", "",
+      \ "## Джерела", "" ])
+
+" Шаблон для записів щоденнику
+au BufNewFile ~/Documents/wiki/diary/*.md
+      \ call append(0,[
+      \ "# " . split(expand('%:r'),'/')[-1], "",
+      \ "## Зробити || +inbox",  "",
+      \ "## Нотатки", "" ])
