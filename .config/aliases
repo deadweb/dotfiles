@@ -1,24 +1,25 @@
 # Aliases
 
 # Commands
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+alias aremove='sudo apt autoremove'
 alias autoremove='sudo apt autoremove'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+alias du='sudo apt dist-upgrade'
+alias fetch='~/.local/bin/fastfetch'
 alias install='sudo apt install'
+alias music='ncmpcpp'
 alias purge='sudo apt purge'
 alias reinstall='sudo apt install --reinstall'
 alias remove='sudo apt remove'
 alias update='sudo apt update'
 alias uu='sudo apt update && sudo apt upgrade'
-alias music='ncmpcpp'
-alias aremove='sudo apt autoremove'
-alias du='sudo apt dist-upgrade'
 alias vw='vim ~/Documents/wiki/index.md'
 
 ## Files
 alias aliases='vim ~/.config/aliases'
-alias sources='sudo vim /etc/apt/sources.list'
 alias i3blocks='vim ~/.config/i3/i3blocks.conf'
 alias i3conf='vim ~/.config/i3/config'
+alias kittyrc='vim ~/.config/kitty/kitty.conf'
+alias sources='sudo vim /etc/apt/sources.list'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
-alias kittyrc='vim ~/.config/kitty/kitty.conf'
