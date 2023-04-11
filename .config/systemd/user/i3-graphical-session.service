@@ -1,0 +1,6 @@
+[Unit]
+Description=trigger graphical-session
+Wants=graphical-session.target
+
+[Service]
+ExecStart=/bin/false
