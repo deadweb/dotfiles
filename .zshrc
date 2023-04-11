@@ -115,3 +115,5 @@ source $HOME/.config/aliases
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 source /home/user/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+~/.local/bin/fastfetch

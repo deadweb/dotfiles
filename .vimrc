@@ -131,7 +131,7 @@ let g:calendar_options = 'nornu'
 let g:calendar_mruler = 'Cіч,Лют,Берез,Квіт,Трав,Черв,Лип,Серп,Верес,Жовт,Листоп,Груд'
 let g:calendar_wruler = 'Нд Пн Вт Ср Чт Пт Сб'
 
-map <C-c> <Esc>:Calendar<cr>
+map <C-c> <Esc>:q<cr>
 
 " Airline
 
