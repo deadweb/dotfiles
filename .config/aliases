@@ -2,6 +2,7 @@
 
 # Commands
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+alias autoremove='sudo apt autoremove'
 alias install='sudo apt install'
 alias purge='sudo apt purge'
 alias reinstall='sudo apt install --reinstall'

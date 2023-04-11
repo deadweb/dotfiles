@@ -149,7 +149,9 @@ let g:airline#extensions#whitespace#enabled = 0 " вимикає показ пр
 nnoremap <C-S-tab> :bprevious<CR>
 nnoremap <C-tab>   :bnext<CR>
 
-" VimWiki
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  VimWiki                                    "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:vimwiki_filetymes = ['vimwiki']
 
@@ -184,6 +186,16 @@ let g:vimwiki_diary_months = {
 " let g:vimwiki_markdown_link_ext = 1
 " let g:taskwiki_markdown_syntax = 'markdown'
 " let g:taskwiki_markdown_syntax = 'vimwiki'
+
+" Colors - працює, але треба налаштувати
+hi VimwikiHeader1 term=bold cterm=bold ctermfg=cyan guifg=cyan
+hi VimwikiHeader2 term=bold cterm=bold ctermfg=cyan guifg=cyan
+hi VimwikiHeader3 term=bold cterm=bold ctermfg=cyan guifg=cyan
+hi VimwikiHeader4 term=bold cterm=bold ctermfg=cyan guifg=cyan
+hi VimwikiHeader5 term=bold cterm=bold ctermfg=cyan guifg=cyan
+"hi VimwikiHeader1 term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
+"hi x196_Red1 ctermfg=196 guifg=#ff0000 "rgb=255,0,0
+"hi link VimwikiHeader1 x196_Red1
 
 " mappings
 map <F5> :setlocal spell! spelllang=en_us<CR>
