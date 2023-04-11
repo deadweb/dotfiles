@@ -3,6 +3,10 @@
 runtime! debian.vim
 syntax on
 
+" turn hybrid line numbers on
+set number relativenumber
+set nu rnu
+
 let g:mapleader="<"
 let g:XkbSwitchEnabled = 1 " перемикає клавіатуру для української
 let g:vimtex_view_method = 'zathura'
@@ -86,7 +90,10 @@ map <C-a> <esc>ggVG<CR>
 map <C-c> <esc>"*yG<CR>
 
 " Прибрати результати пошуку
-map <C-s> :noh<CR>
+map <S-s> :noh<CR>
+
+" Збереження
+map <C-s> :w!<CR>
 
 " Source a global configuration file if available
 if filereadable("/etc/vim/vimrc.local")
@@ -194,7 +201,7 @@ map <C-f> :Files ~/Documents/wiki/<CR>
 map <S-f> :Rg<CR>
 
 " Шаблон для записів
-au BufNewFile ~/Documents/wiki/*.md
+au BufNewFile ~/Documents/wiki/**.md
       \ call append(0,[
       \ "# " . split(expand('%:r'),'/')[-1], "",
       \ "## Посилання", "",
