@@ -115,6 +115,7 @@ bindsym XF86AudioStop exec mpc stop
 # start a terminal
 #bindsym Mod1+Return exec i3-sensible-terminal
 bindsym $mod+Return exec kitty
+bindsym $mod+Shift+Return exec kitty --class floating
 
 # kill focused window
 bindsym $mod+q kill
@@ -232,12 +233,15 @@ for_window [class='^.*'] border pixel 1
 for_window [class='i3-frame'] resize set 640 480, position center
 for_window [class='KeePassXC'] floating enable, move window to 550 250, move scratchpad, resize set 140 480
 
+for_window [class="^floating$"] floating enable, move window to 550 250, resize set 140 480 
+
 #######################################################################
 
 exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
-exec_always --no-startup-id systemctl --user start i3-graphical-session
 exec_always --no-startup-id kbdd & setxkbmap -option 'grp:alt_shift_toggle' -layout us,ua
 exec_always --no-startup-id picom
+exec_always --no-startup-id syncthing --no-browser
+exec_always --no-startup-id systemctl --user start i3-graphical-session
 exec_always --no-startup-id udisks-glue -f
 exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
 
@@ -245,5 +249,4 @@ exec --no-startup-id feh --bg-scale $wallpaper
 exec --no-startup-id keepassxc
 exec --no-startup-id nm-applet
 exec --no-startup-id schildichat-desktop
-exec --no-startup-id syncthing --no-console --no-browser
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
