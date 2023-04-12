@@ -1,14 +1,16 @@
-#  _ _____                  __ 
-# (_)___ /  ___ ___  _ __  / _|
-# | | |_ \ / __/ _ \| '_ \| |_ 
-# | |___) | (_| (_) | | | |  _|
-# |_|____/ \___\___/|_| |_|_|  
-#                             
+#################################
+#  _ _____                  __  #
+# (_)___ /  ___ ___  _ __  / _| #
+# | | |_ \ / __/ _ \| '_ \| |_  #
+# | |___) | (_| (_) | | | |  _| #
+# |_|____/ \___\___/|_| |_|_|   #
+#                               #  
+#################################
 
 # i3 config file (v4)
 
-# Узнать клавишу xev
-### Distribution of windows on desktops (xprop - learn window class).
+# xev - learn key
+# Distribution of windows on desktops (xprop - learn window class).
 
 set $mod Mod4
 
@@ -31,18 +33,20 @@ set $down j
 set $left h
 set $right l
 
-### Colors / Кольори
+### Colors
 set $bg-color            #2D2D2D
 set $inactive-bg-color   #232323
 set $text-color          #DCDCDC
 set $inactive-text-color #7d7d7d
 set $urgent-bg-color     #D64937
 
-###########################
+###################
+# Global settings #
+###################
 
 font pango:monospace 0
 
-# use Mouse+Mod1 to drag floating windows to their wanted position
+# use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 workspace_layout tabbed
 focus_follows_mouse no
@@ -53,6 +57,7 @@ hide_edge_borders smart
 new_window pixel 1
 new_float normal
 
+# Floating windows size
 floating_minimum_size 75 x 50
 floating_maximum_size 1343 x 725
 
@@ -61,14 +66,12 @@ smart_gaps on
 gaps inner 10
 #gaps outer 1
 
-#### / Налаштування кольорів вікон
-
+# Colors settings
 #                          border               background           text                 indicator        child_border
 client.focused             $inactive-text-color $inactive-text-color $text-color          $urgent-bg-color $inactive-text-color
 client.unfocused           $bg-color            $bg-color            $inactive-text-color $bg-color        $bg-color
 client.focused_inactive    $bg-color            $bg-color            $text-color          $bg-color        $bg-color
 client.urgent              $urgent-bg-color     $bg-color            $urgent-bg-color     $bg-color        $bg-color
-
 
 bar {
     # Height in pixels
@@ -91,7 +94,10 @@ bar {
       urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
    }
 }
-###################################
+
+###########
+# Byndsym #
+###########
 
 bindsym --release Print exec scrot "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
 bindsym --release Shift+Print exec scrot -fs "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
@@ -122,11 +128,6 @@ bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id rofi -modi run -show drun
-# A more modern dmenu replacement is rofi:
-# bindsym Mod1+d exec "rofi -modi drun,run -show drun"
-# There also is i3-dmenu-desktop which only displays applications shipping a
-# .desktop file. It is a wrapper around dmenu, so you need that installed.
-# bindsym Mod1+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+$left focus left
@@ -218,25 +219,31 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-
 bindsym $mod+t exec --no-startup-id ~/.local/bin/translate
 
-####################################################################
-
-assign [class="SchildiChat"] $ws4
-assign [class='librewolf-default'] $ws2
+####################
+# Windows settings #
+####################
 
 # Hide title
 for_window [class='^.*'] border pixel 1
 for_window [class='i3-frame'] resize set 640 480, position center
-for_window [class='KeePassXC'] floating enable, move window to 550 250, move scratchpad, resize set 140 480
 
+# Floating windows settings
 for_window [class="^floating$"] floating enable, move window to 550 250, resize set 140 480 
 
-#######################################################################
+# Move windows to scratchpad
+for_window [class='KeePassXC'] floating enable, move window to 550 250, move scratchpad, resize set 140 480
 
+# Move windows to workspaces
+for_window [class="librewolf-default"] move to workspace $ws2
+for_window [class="google_ads_editor.exe"] move to workspace $ws3
+
+######################
+# Launching programs #
+######################
+
+# Exec_always
 exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 exec_always --no-startup-id kbdd & setxkbmap -option 'grp:alt_shift_toggle' -layout us,ua
 exec_always --no-startup-id picom
@@ -245,6 +252,7 @@ exec_always --no-startup-id systemctl --user start i3-graphical-session
 exec_always --no-startup-id udisks-glue -f
 exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
 
+# Exec
 exec --no-startup-id feh --bg-scale $wallpaper
 exec --no-startup-id keepassxc
 exec --no-startup-id nm-applet
