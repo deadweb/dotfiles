@@ -90,8 +90,6 @@ call plug#end()
 filetype on
 filetype plugin on
 
-
-
 " Виділити текст 
 map <C-a> <esc>ggVG<CR>
 map <C-c> <esc>"*yG<CR>
@@ -106,7 +104,6 @@ map <C-s> :w!<CR>
 if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
-
 
 " open-browser.vim
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
@@ -204,6 +201,13 @@ hi VimwikiHeader5 term=bold cterm=bold ctermfg=cyan guifg=cyan
 "hi x196_Red1 ctermfg=196 guifg=#ff0000 "rgb=255,0,0
 "hi link VimwikiHeader1 x196_Red1
 
+" Копіює посилання на попередню сторінку
+function! s:copy_filename_as_mdlink()
+         let fname=expand("%")
+         let @a="[" . fname . "](./" . fname. ")"
+endfunction
+autocmd BufLeave * call s:copy_filename_as_mdlink()
+
 " mappings
 map <F5> :setlocal spell! spelllang=en_us<CR>
 map <F6> :setlocal spell! spelllang=uk<CR>
@@ -224,7 +228,7 @@ au BufNewFile ~/Documents/wiki/**.md
       \ call append(0,[
       \ "# " . split(expand('%:r'),'/')[-1], "",
       \ "## Посилання", "",
-      \ "## Джерела", "" ])
+       "## Джерела", "" ])
 
 " Шаблон для записів щоденнику
 au BufNewFile ~/Documents/wiki/diary/*.md

@@ -59,7 +59,7 @@ new_float normal
 
 # Floating windows size
 floating_minimum_size 75 x 50
-floating_maximum_size 1343 x 725
+floating_maximum_size 900 x 500
 
 # Gaps
 smart_gaps on
