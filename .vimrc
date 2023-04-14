@@ -10,6 +10,10 @@
 runtime! debian.vim
 syntax on
 
+" Кольори
+set background=dark
+set termguicolors
+
 " turn hybrid line numbers on
 set number relativenumber
 set nu rnu
@@ -17,8 +21,7 @@ set nu rnu
 let g:mapleader="<"
 let g:XkbSwitchEnabled = 1 " перемикає клавіатуру для української
 let g:vimtex_view_method = 'zathura'
-"colorscheme base16-atlas
-"let base16colorspace=256
+
 set t_Co=256
 autocmd BufWritePost ~/.Xresources !xrdb %
 
@@ -438,6 +441,11 @@ hi  x255_Grey93             ctermfg=255  guifg=#eeeeee  "rgb=238,238,238
 " Vim colors
 "" Line number
 highlight LineNr ctermfg=239  guifg=#4e4e4e  
+"hi SpellBad term=underline cterm=underline ctermfg=124  guisp=#af0000 
+hi SpellBad term=undercurl cterm=underline ctermul=124 ctermbg=none gui=undercurl guisp=#af0000 
+hi Search term=reverse cterm=reverse ctermbg=124 ctermbg=236 guisp=#303030 
+hi IncSearch cterm=NONE ctermfg=197 ctermbg=green
+hi Search cterm=NONE ctermfg=196 ctermbg=198 ctermbg=green
 
 " VimWiki Colors - працює, але треба налаштувати
 "" Heders
@@ -446,9 +454,14 @@ hi VimwikiHeader2 term=bold cterm=bold ctermfg=80   guifg=#5fd7d7
 hi VimwikiHeader3 term=bold cterm=bold ctermfg=75   guifg=#5fafff 
 hi VimwikiHeader4 term=bold cterm=bold ctermfg=74   guifg=#5fafd7
 hi VimwikiHeader5 term=bold cterm=bold ctermfg=111  guifg=#87afff
+hi VimwikiHeader6 term=bold cterm=bold ctermfg=152  guifg=#afd7d7 
 
 "" Links
 hi VimwikiLink term=underline cterm=underline ctermfg=40   guifg=#00d700 
+
+"" Code
+hi VimwikiCode term=bold ctermfg=219 cterm=bold guifg=#ffafff 
+hi VimwikiPre term=bold cterm=bold ctermfg=240  guifg=#585858 
 
 " Копіює посилання на попередню сторінку
 function! s:copy_filename_as_mdlink()
