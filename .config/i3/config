@@ -48,7 +48,7 @@ font pango:monospace 0
 
 # use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
-workspace_layout tabbed
+workspace_layout tabbed 
 focus_follows_mouse no
 # default_border pixel 1
 hide_edge_borders smart
@@ -170,6 +170,7 @@ bindsym $mod+a focus parent
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+grave mark 'alpha', move scratchpad
 bindsym $mod+grave [con_mark='alpha'] scratchpad show
+bindsym $mod+p [class="keepassxc" class="KeePassXC"] scratchpad show
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -230,14 +231,16 @@ for_window [class='^.*'] border pixel 1
 for_window [class='i3-frame'] resize set 640 480, position center
 
 # Floating windows settings
-for_window [class="^floating$"] floating enable, move window to 550 250, resize set 140 480 
+for_window [class="^floating$"] floating enable, resize set 140 480 
 
 # Move windows to scratchpad
-for_window [class='KeePassXC'] floating enable, move window to 550 250, move scratchpad, resize set 140 480
+for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
 
 # Move windows to workspaces
-for_window [class="librewolf-default"] move to workspace $ws2
+for_window [id="0x2e00039"] move to workspace $ws4
 for_window [class="google_ads_editor.exe"] move to workspace $ws3
+for_window [class="librewolf-default"] move to workspace $ws2
+for_window [id="0x1000003"] move to workspace $ws4
 
 ######################
 # Launching programs #
@@ -246,7 +249,7 @@ for_window [class="google_ads_editor.exe"] move to workspace $ws3
 # Exec_always
 exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 exec_always --no-startup-id kbdd & setxkbmap -option 'grp:alt_shift_toggle' -layout us,ua
-exec_always --no-startup-id picom
+exec_always --no-startup-id picom --experimental-backends --config ~/.config/picom/config
 exec_always --no-startup-id syncthing --no-browser
 exec_always --no-startup-id systemctl --user start i3-graphical-session
 exec_always --no-startup-id udisks-glue -f
@@ -254,7 +257,8 @@ exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
 
 # Exec
 exec --no-startup-id feh --bg-scale $wallpaper
-exec --no-startup-id keepassxc
 exec --no-startup-id nm-applet
 exec --no-startup-id schildichat-desktop
+exec --no-startup-id sleep 5 && keepassxc
+exec --no-startup-id thunderbird
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork

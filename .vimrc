@@ -174,6 +174,7 @@ let g:vimwiki_list = [{'path':'~/Documents/wiki','ext':'.md','syntax':'markdown'
 
 let g:nv_search_paths = ['~/Documents/wiki/']
 " let g:vimwiki_listsyms = '✗○◐●✓' " чекбокси
+" let g:vimwiki_listsyms = ' ▂▄▆✓'
 let g:vimwiki_list = [{'auto_diary_index': 1}] " автоматично генерує індекс щоденнику додаючі нові записи
 let g:vimwiki_diary_months = {
          \ 1: 'Січень',
@@ -443,9 +444,8 @@ hi  x255_Grey93             ctermfg=255  guifg=#eeeeee  "rgb=238,238,238
 highlight LineNr ctermfg=239  guifg=#4e4e4e  
 "hi SpellBad term=underline cterm=underline ctermfg=124  guisp=#af0000 
 hi SpellBad term=undercurl cterm=underline ctermul=124 ctermbg=none gui=undercurl guisp=#af0000 
-hi Search term=reverse cterm=reverse ctermbg=124 ctermbg=236 guisp=#303030 
 hi IncSearch cterm=NONE ctermfg=197 ctermbg=green
-hi Search cterm=NONE ctermfg=196 ctermbg=198 ctermbg=green
+hi Search cterm=NONE ctermfg=196 ctermbg=214 guisp=#ffaf00
 
 " VimWiki Colors - працює, але треба налаштувати
 "" Heders
