@@ -38,6 +38,7 @@ set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ї],фa,іs,вd,аf,пg,
 set iminsert=0
 set imsearch=0
 set noswapfile
+
 highlight lCursor guifg=NONE guibg=Cyan
 
 set encoding=utf-8 " кодування UTF-8
@@ -65,6 +66,21 @@ set guioptions = "Відключаємо панелі прокрутки в GUI
 "Сам по собі number показує праворуч номера рядків
 "Relativenumber - нумерацію рядків щодо положення курсора
 " set number relativenumber "А це гібридний варіант. Протестуйте все
+
+" Mode Settings
+
+let &t_SI.="\e[5 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+
+"Cursor settings:
+
+" 1 -> blinking block
+" 2 -> solid block 
+" 3 -> blinking underscore
+" 4 -> solid underscore
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
 
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 " au FileType vimwiki setlocal shiftwidth=6 noexpandtab
@@ -190,6 +206,7 @@ let g:vimwiki_diary_months = {
          \ 11: 'Листопад',
          \ 12: 'Грудень',
          \ }
+
 " let g:vimwiki_ext2syntax = {'md':'markdown', '.markdown':'markdown'}
 " let g:vimwiki_markdown_link_ext = 1
 " let g:taskwiki_markdown_syntax = 'markdown'
@@ -444,8 +461,12 @@ hi  x255_Grey93             ctermfg=255  guifg=#eeeeee  "rgb=238,238,238
 highlight LineNr ctermfg=239  guifg=#4e4e4e  
 "hi SpellBad term=underline cterm=underline ctermfg=124  guisp=#af0000 
 hi SpellBad term=undercurl cterm=underline ctermul=124 ctermbg=none gui=undercurl guisp=#af0000 
-hi IncSearch cterm=NONE ctermfg=197 ctermbg=green
-hi Search cterm=NONE ctermfg=196 ctermbg=214 guisp=#ffaf00
+
+hi IncSearch cterm=none ctermfg=236 ctermbg=202
+hi Search cterm=none ctermfg=236 ctermbg=208 guisp=#ff8700
+
+"" Visual mod
+hi Visual term=reverse cterm=reverse guibg=#303030
 
 " VimWiki Colors - працює, але треба налаштувати
 "" Heders

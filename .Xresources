@@ -1,4 +1,4 @@
-! ------------------------------------------------------------------------------
+ ------------------------------------------------------------------------------
 ! All Color theme
 ! ------------------------------------------------------------------------------
 
@@ -38,22 +38,3 @@ color14:      #4cb6e5
 ! white
 color7:       #DCDCDC
 color15:      #DCDCDC
-
-! ------------------------------------------------------------------------------
-! ROFI Color theme
-! ------------------------------------------------------------------------------
-
-rofi.modi:          drun,run
-rofi.color-enabled: true
-!                   background   border    separator
-rofi.color-window:  #2D2D2D,     #7d7d7d,  #2D2D2D
-rofi.color-normal:  #2D2D2D,     #d8dee9,  #2D2D2D, #d8dee9, #2D2D2D
-rofi.color-active:  #2D2D2D,     #2D2D2D,  #2D2D2D, #2D2D2D, #d8dee9
-rofi.color-urgent:  #2D2D2D,     #f0544c,  #2D2D2D, #f0544c, #d8dee9
-
-!rofi.separator-style: solid
-!rofi.sidebar-mode:    true
-rofi.padding:         20
-rofi.bw:              1
-rofi.scrollbar-width: 0
-!rofi.line-margin:     0
