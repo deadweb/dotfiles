@@ -6,14 +6,15 @@
 #                                 
 
 # Commands
+#alias ls='~/.local/bin/ls'
 alias aremove='sudo apt autoremove'
 alias autoremove='sudo apt autoremove'
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
 alias du='sudo apt dist-upgrade'
 alias fetch='~/.local/bin/fastfetch'
-alias fetch='~/.local/bin/fastfetch'
+alias fetchrc='vim ~/.config/fastfetch/config.conf'
 alias install='sudo apt install'
-alias ls='/opt/coreutils/bin/ls'
+alias ls='lsd'
 alias music='ncmpcpp'
 alias purge='sudo apt purge'
 alias reinstall='sudo apt install --reinstall'

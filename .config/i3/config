@@ -10,6 +10,7 @@
 # i3 config file (v4)
 
 # xev - learn key
+# xwininfo - learn id
 # Distribution of windows on desktops (xprop - learn window class).
 
 set $mod Mod4
@@ -201,16 +202,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym $left       resize shrink width 10 px or 10 ppt
-        bindsym $down       resize grow height 10 px or 10 ppt
-        bindsym $up         resize shrink height 10 px or 10 ppt
-        bindsym $right      resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym Left        resize shrink width 10 px or 10 ppt
-        bindsym Down        resize grow height 10 px or 10 ppt
-        bindsym Up          resize shrink height 10 px or 10 ppt
-        bindsym Right       resize grow width 10 px or 10 ppt
+        bindsym $left       resize shrink width 1 px or 1 ppt
+        bindsym $down       resize grow height 1 px or 1 ppt
+        bindsym $up         resize shrink height 1 px or 1 ppt
+        bindsym $right      resize grow width 1 px or 1 ppt
 
         # back to normal: Enter or Escape or Mod1+r
         bindsym Return mode "default"
@@ -220,7 +215,11 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Scripts
+
 bindsym $mod+t exec --no-startup-id ~/.local/bin/translate
+bindsym $mod+m exec --no-startup-id ~/.local/bin/mpv-play
+bindsym $mod+Tab exec --no-startup-id ~/.config/i3/scripts/i3-cycle-windows
 
 ####################
 # Windows settings #
@@ -232,14 +231,17 @@ for_window [class='i3-frame'] resize set 640 480, position center
 
 # Floating windows settings
 for_window [class="^floating$"] floating enable, resize set 140 480 
+# for_window [id="0x3a00002"] floating enable, move position center, resize set 140 480 # mpv
 
 # Move windows to scratchpad
 for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
 
 # Move windows to workspaces
+for_window [id="0x3a00002"] move to workspace $ws1 # mpv
 for_window [id="0x2e00039"] move to workspace $ws4
-for_window [class="google_ads_editor.exe"] move to workspace $ws3
 for_window [class="librewolf-default"] move to workspace $ws2
+for_window [id="0x500000e"] move to workspace $ws3 # Ads Editor
+for_window [id="0x500000b"] move to workspace $ws3 # Ads Editor
 for_window [id="0x1000003"] move to workspace $ws4
 
 ######################
