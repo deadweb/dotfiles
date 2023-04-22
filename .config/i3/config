@@ -237,11 +237,11 @@ for_window [class="^floating$"] floating enable, resize set 140 480
 for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
 
 # Move windows to workspaces
-for_window [id="0x3a00002"] move to workspace $ws1 # mpv
+## mpv
+for_window [id="0x3a00002"] move to workspace $ws1 
 for_window [id="0x2e00039"] move to workspace $ws4
 for_window [class="librewolf-default"] move to workspace $ws2
-for_window [id="0x500000e"] move to workspace $ws3 # Ads Editor
-for_window [id="0x500000b"] move to workspace $ws3 # Ads Editor
+for_window [class="google_ads_editor.exe"] move to workspace $ws3 
 for_window [id="0x1000003"] move to workspace $ws4
 
 ######################
