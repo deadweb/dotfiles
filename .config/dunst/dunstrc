@@ -1,5 +1,5 @@
 [global]
-    font = FiraCode NF 10
+    font = Dejavu Sans 11
 
     # allow a small subset of html markup:
     # <b>bold</b>
