@@ -261,6 +261,6 @@ exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
 exec --no-startup-id feh --bg-scale $wallpaper
 exec --no-startup-id nm-applet
 exec --no-startup-id schildichat-desktop
-exec --no-startup-id sleep 5 && keepassxc
+exec --no-startup-id keepassxc
 exec --no-startup-id thunderbird
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
