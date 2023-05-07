@@ -168,6 +168,9 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym Mod1+d focus child
 
+# sticky window toggle
+bindsym $mod+y sticky toggle
+
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+grave mark 'alpha', move scratchpad
 bindsym $mod+grave [con_mark='alpha'] scratchpad show
