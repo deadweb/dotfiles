@@ -38,6 +38,7 @@ alias yt='ytfzf'
 alias ytda='yt-dlp --extract-audio --audio-format mp3 -ciw -o "%(title)s.%(ext)s" -v'
 alias ytdv='yt-dlp "%(title)s.%(ext)s"'
 alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
+alias dotpush='f() { git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME add -f "$1";  git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME commit -m "${2:-update}"; git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME push -u origin main --force; }; f'
 
 ## Files
 

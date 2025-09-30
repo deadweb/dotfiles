@@ -92,12 +92,6 @@ fi
 #alias la='ls -A'
 #alias l='ls -CF'
 
-alias dotpush='f() { \
-			git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME add -f "$1"; \
-  			git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME commit -m "${2:-update}"; \
-  			git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME push -u origin main --force; \
-		}; f'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
