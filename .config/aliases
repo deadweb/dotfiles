@@ -1,0 +1,68 @@
+> [!info] `= this.name`
+> (info:: )
+
+## Налаштування аліасів
+
+Шлях до файлу з аліасами `~/.config/aliases`. Зміст файлу:
+
+```sh
+#     _    _ _                     
+#    / \  | (_) __ _ ___  ___  ___ 
+#   / _ \ | | |/ _` / __|/ _ \/ __|
+#  / ___ \| | | (_| \__ \  __/\__ \
+# /_/   \_\_|_|\__,_|___/\___||___/
+#                                 
+
+# Commands
+
+#alias ls='~/.local/bin/ls'
+#alias tar='tar -cvf'
+alias untar='tar xzvf'
+#alies unzip="unzip x"
+alias Зязя,="hey,"
+alias ar='sudo apt autoremove'
+alias aremove='sudo apt autoremove'
+alias autoremove='sudo apt autoremove'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+alias du='sudo apt dist-upgrade'
+alias fetch='~/.local/bin/fastfetch'
+alias fetchrc='vim ~/.config/fastfetch/config.conf'
+alias install='sudo apt install'
+alias ls='lsd'
+alias music='ncmpcpp'
+alias purge='sudo apt purge'
+alias reinstall='sudo apt install --reinstall'
+alias remove='sudo apt remove'
+alias ssh='kitten ssh'
+alias targz='tar -czvf'
+alias tt='~/.local/bin/taskwarrior-tui'
+alias un7z='7za x'
+alias unxz='xz -d -v'
+alias update='sudo apt update'
+alias upgrade='sudo apt upgrade'
+alias uu='sudo apt update && sudo apt upgrade'
+alias vw='vim ~/Documents/wiki/index.md'
+alias yt='ytfzf'
+alias ytda='yt-dlp --extract-audio --audio-format mp3 -ciw -o "%(title)s.%(ext)s" -v'
+alias ytdv='yt-dlp "%(title)s.%(ext)s"'
+alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
+alias zathurarc='vim ~/.config/zathura/zathurarc'
+
+## Files
+
+alias aliases='vim ~/.config/aliases'
+alias dunstrc='vim ~/.config/dunst/dunstrc'
+alias i3blocks='vim ~/.config/i3/i3blocks.conf'
+alias i3conf='vim ~/.config/i3/config'
+alias kittyrc='vim ~/.config/kitty/kitty.conf'
+alias mpdrc='vim ~/.config/mpd/mpd.conf'
+alias ncmpcpprc='vim ~/.ncmpcpp/config'
+alias picomrc='vim ~/.config/picom/config'
+alias rangerc='vim ~/.config/ranger/rc.conf'
+alias rofirc='vim ~/.config/rofi/config.rasi'
+alias sources='sudo vim /etc/apt/sources.list'
+alias subs='vim ~/.config/ytfzf/subscriptions'
+alias taskrc='~/.taskrc'
+alias treevw='tree -L 1 ~/Documents/wiki'
+alias vimrc='vim ~/.vimrc'
+alias zshrc='vim ~/.zshrc'
