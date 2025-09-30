@@ -1,0 +1,38 @@
+! --- Шрифти ---
+URxvt.font: xft:Fira Code:size=11:antialias=true:spacing=-1
+URxvt.boldFont: xft:Fira Code:bold:size=11:antialias=true:spacing=-1
+
+! --- Основні кольори ---
+URxvt.background: #2d2d2d
+URxvt.foreground: #dcdcdc
+URxvt.cursorColor: #dcdcdc
+
+URxvt.color0:  #2d2d2d
+URxvt.color1:  #ff5555
+URxvt.color2:  #50fa7b
+URxvt.color3:  #f1fa8c
+URxvt.color4:  #bd93f9
+URxvt.color5:  #ff79c6
+URxvt.color6:  #8be9fd
+URxvt.color7:  #dcdcdc
+
+URxvt.color8:  #555555
+URxvt.color9:  #ff6e6e
+URxvt.color10: #69ff94
+URxvt.color11: #ffffa5
+URxvt.color12: #d6acff
+URxvt.color13: #ff92df
+URxvt.color14: #a4ffff
+URxvt.color15: #ffffff
+
+! --- Вимкнути смугу прокрутки ---
+URxvt.scrollBar: false
+URxvt.saveLines: 10000
+
+! --- Копіювання / вставка через Perl ---
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+URxvt.perl-ext-common: default,clipboard
+URxvt.keysym.Control-Shift-C: eval:selection_to_clipboard
+URxvt.keysym.Control-Shift-V: eval:paste_clipboard
+
