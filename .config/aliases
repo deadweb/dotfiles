@@ -9,13 +9,12 @@
 
 #alias ls='~/.local/bin/ls'
 #alias tar='tar -cvf'
-alias untar='tar xzvf'
 #alies unzip="unzip x"
-alias Зязя,="hey,"
 alias ar='sudo apt autoremove'
 alias aremove='sudo apt autoremove'
 alias autoremove='sudo apt autoremove'
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.config/dotfiles/ --work-tree=$HOME'
+alias dotpush='f() { git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME add -f "$1";  git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME commit -m "${2:-update}"; git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME push -u origin main --force; }; f'
 alias du='sudo apt dist-upgrade'
 alias fetch='~/.local/bin/fastfetch'
 alias fetchrc='vim ~/.config/fastfetch/config.conf'
@@ -29,6 +28,7 @@ alias ssh='kitten ssh'
 alias targz='tar -czvf'
 alias tt='~/.local/bin/taskwarrior-tui'
 alias un7z='7za x'
+alias untar='tar xzvf'
 alias unxz='xz -d -v'
 alias update='sudo apt update'
 alias upgrade='sudo apt upgrade'
@@ -38,7 +38,7 @@ alias yt='ytfzf'
 alias ytda='yt-dlp --extract-audio --audio-format mp3 -ciw -o "%(title)s.%(ext)s" -v'
 alias ytdv='yt-dlp "%(title)s.%(ext)s"'
 alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
-alias dotpush='f() { git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME add -f "$1";  git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME commit -m "${2:-update}"; git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME push -u origin main --force; }; f'
+alias Зязя,="hey,"
 
 ## Files
 
