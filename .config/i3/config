@@ -1,0 +1,283 @@
+#################################
+#  _ _____                  __  #
+# (_)___ /  ___ ___  _ __  / _| #
+# | | |_ \ / __/ _ \| '_ \| |_  #
+# | |___) | (_| (_) | | | |  _| #
+# |_|____/ \___\___/|_| |_|_|   #
+#                               #  
+#################################
+
+# i3 config file (v4)
+
+# xev - learn key
+# xwininfo - learn id
+# Distribution of windows on desktops (xprop - learn window class).
+
+set $mod Mod4
+
+#set $refresh_i3status killall -SIGUSR1 i3status
+
+set $wallpaper $HOME/.config/i3/x220.png
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1: "
+set $ws2 "2: "
+set $ws3 "3: "
+set $ws4 "4: "
+set $ws5 "5: "
+
+# use these keys for focus, movement, and resize directions when reaching for
+# the arrows is not convenient
+set $up k
+set $down j
+set $left h
+set $right l
+
+### Colors
+set $bg-color            #2D2D2D
+set $inactive-bg-color   #232323
+set $text-color          #DCDCDC
+set $inactive-text-color #7d7d7d
+set $urgent-bg-color     #D64937
+
+###################
+# Global settings #
+###################
+
+font pango:monospace 0
+
+# use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+workspace_layout tabbed 
+focus_follows_mouse no
+# default_border pixel 1
+hide_edge_borders smart
+
+# Hides window headers and borders.
+new_window pixel 1
+new_float normal
+
+# Floating windows size
+floating_minimum_size 75 x 50
+floating_maximum_size 900 x 600
+
+# Gaps
+smart_gaps on
+gaps inner 10
+gaps outer 1
+
+# Colors settings
+#                          border               background           text                 indicator        child_border
+client.focused             $inactive-text-color $inactive-text-color $text-color          $urgent-bg-color $inactive-text-color
+client.unfocused           $bg-color            $bg-color            $inactive-text-color $bg-color        $bg-color
+client.focused_inactive    $bg-color            $bg-color            $text-color          $bg-color        $bg-color
+client.urgent              $urgent-bg-color     $bg-color            $urgent-bg-color     $bg-color        $bg-color
+
+bar {
+   # status_command i3blocks -c $HOME/.config/i3/i3blocks.conf
+    status_command SCRIPT_DIR="$HOME/.config/i3/scripts" i3blocks -c $HOME/.config/i3/i3blocks.conf
+    # Height in pixels
+    height 22
+    position top
+    separator_symbol " "
+    tray_output primary
+    workspace_buttons yes
+    strip_workspace_numbers yes
+    tray_padding 5
+    font pango:FontAwesome, Play 8
+    colors {
+      background $bg-color
+      separator  $inactive-text-color
+
+      #                  border             background         text
+      focused_workspace  $bg-color          $bg-color          $text-color
+      inactive_workspace $bg-color          $bg-color          $inactive-text-color
+      urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+   }
+}
+
+###########
+# Byndsym #
+###########
+
+bindsym --release Print exec scrot "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
+bindsym --release Shift+Print exec scrot -fs "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
+
+# Use pactl to adjust volume in PulseAudio.
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+### / Управління яскравістю екрана
+bindsym XF86MonBrightnessDown exec --no-startup-id brillo -q -U 5
+bindsym XF86MonBrightnessUp exec --no-startup-id brillo -q -A 5
+
+### / Управління музичним плеером
+bindsym XF86AudioNext exec mpc next
+bindsym XF86AudioPlay exec mpc toggle
+bindsym XF86AudioPrev exec mpc prev
+bindsym XF86AudioStop exec mpc stop
+
+# start a terminal
+#bindsym Mod1+Return exec i3-sensible-terminal
+bindsym $mod+Return exec kitty
+bindsym $mod+Shift+Return exec kitty --class floating
+
+# kill focused window
+bindsym $mod+q kill
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec --no-startup-id rofi -show drun
+
+# change focus
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# move focused window
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+# split in horizontal orientation
+bindsym $mod+g split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+# bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym Mod1+d focus child
+
+# sticky window toggle
+bindsym $mod+y sticky toggle
+
+# move the currently focused window to the scratchpad
+bindsym $mod+Shift+grave mark 'alpha', move scratchpad
+bindsym $mod+grave [con_mark='alpha'] scratchpad show
+bindsym $mod+p [class="keepassxc" class="KeePassXC"] scratchpad show
+
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym $left       resize shrink width 1 px or 1 ppt
+        bindsym $down       resize grow height 1 px or 1 ppt
+        bindsym $up         resize shrink height 1 px or 1 ppt
+        bindsym $right      resize grow width 1 px or 1 ppt
+
+        # back to normal: Enter or Escape or Mod1+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym Mod1+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Scripts
+
+bindsym $mod+t exec --no-startup-id ~/.local/bin/translate
+bindsym $mod+m exec --no-startup-id ~/.local/bin/mpv-play
+bindsym $mod+Tab exec --no-startup-id ~/.config/i3/scripts/i3-cycle-windows
+
+####################
+# Windows settings #
+####################
+
+# Hide title
+for_window [class='^.*'] border pixel 1
+for_window [class='i3-frame'] resize set 640 480, position center
+
+# Floating windows settings
+for_window [class="^floating$"] floating enable, move position center 
+# for_window [id="0x3a00002"] floating enable, move position center, resize set 140 480 # mpv
+
+# Move windows to scratchpad
+for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
+
+# Move windows to workspaces
+
+for_window [class="librewolf-default"] layout tabbed, move to workspace $ws2
+for_window [class="Chromium"] layout tabbed, move to workspace $ws2
+
+for_window [class="obsidian"] layout tabbed, move to workspace $ws3 
+for_window [class="google_ads_editor.exe"] layout tabbed, move to workspace $ws3
+for_window [class="libreoffice"] layout tabbed, move to workspace $ws3
+for_window [class="Zathura"] move to workspace $ws3
+
+for_window [class="Element"] layout tabbed, move to workspace $ws4
+for_window [class="Viber"] layout tabbed, move to workspace $ws4
+for_window [class="thunderbird-default"] layout tabbed, move to workspace $ws4
+
+for_window [class="Zotero"] layout tabbed, move to workspace $ws5
+for_window [class="transmission-gtk"] layout tabbed, move to workspace $ws5
+for_window [class="zoom"] layout tabbed, move to workspace $ws5
+
+######################
+# Launching programs #
+######################
+
+# Exec_always
+exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
+exec_always --no-startup-id feh --bg-scale $wallpaper
+exec_always --no-startup-id kbdd & setxkbmap -option 'grp:alt_shift_toggle' -layout us,ua 
+exec_always --no-startup-id picom --experimental-backends --config ~/.config/picom/config
+exec_always --no-startup-id syncthing --no-browser
+exec_always --no-startup-id systemctl --user start i3-graphical-session
+exec_always --no-startup-id udisks-glue -f
+#exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
+exec_always --no-startup-id xinput disable "SynPS/2 Synaptics TouchPad"
+
+# Exec
+exec --no-startup-id nm-applet
+exec --no-startup-id udiskie &
+exec --no-startup-id element-desktop
+exec --no-startup-id keepassxc
+exec --no-startup-id thunderbird
+exec --no-startup-id zotero
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
