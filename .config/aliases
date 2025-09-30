@@ -38,7 +38,6 @@ alias yt='ytfzf'
 alias ytda='yt-dlp --extract-audio --audio-format mp3 -ciw -o "%(title)s.%(ext)s" -v'
 alias ytdv='yt-dlp "%(title)s.%(ext)s"'
 alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
-alias zathurarc='vim ~/.config/zathura/zathurarc'
 
 ## Files
 
@@ -57,4 +56,5 @@ alias subs='vim ~/.config/ytfzf/subscriptions'
 alias taskrc='~/.taskrc'
 alias treevw='tree -L 1 ~/Documents/wiki'
 alias vimrc='vim ~/.vimrc'
+alias zathurarc='vim ~/.config/zathura/zathurarc'
 alias zshrc='vim ~/.zshrc'
