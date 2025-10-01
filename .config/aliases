@@ -19,7 +19,7 @@ alias du='sudo apt dist-upgrade'
 alias fetch='~/.local/bin/fastfetch'
 alias fetchrc='vim ~/.config/fastfetch/config.conf'
 alias install='sudo apt install'
-alias ls='lsd'
+#alias ls='lsd'
 alias music='ncmpcpp'
 alias purge='sudo apt purge'
 alias reinstall='sudo apt install --reinstall'
@@ -38,7 +38,6 @@ alias yt='ytfzf'
 alias ytda='yt-dlp --extract-audio --audio-format mp3 -ciw -o "%(title)s.%(ext)s" -v'
 alias ytdv='yt-dlp "%(title)s.%(ext)s"'
 alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
-alias Зязя,="hey,"
 
 ## Files
 
