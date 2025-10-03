@@ -1,4 +1,5 @@
 set noswapfile
+set clipboard=unnamedplus " Використовувати системний буфер за замовчуванням
 syntax on           " увімкнути підсвічування синтаксису
 set background=dark " якщо темна тема терміналу, або light для світлої
 colorscheme desert  " обрана колірна схема
