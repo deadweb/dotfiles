@@ -1,0 +1,32 @@
+[global]
+font = JetBrainsMono 10
+frame_width = 2            # товщина бордера
+corner_radius = 0          # закруглення
+padding = 8
+transparency = 0
+background = "#2D2D2D"
+foreground = "#DCDCDC"
+frame_color = "#7d7d7d"    # колір бордера
+
+# Позиція
+origin = top-right
+offset = 10x35             # відступ від правого і верхнього краю
+
+[urgency_low]
+background = "#232323"
+foreground = "#7d7d7d"
+frame_color = "#232323"
+timeout = 4
+
+[urgency_normal]
+background = "#2D2D2D"
+foreground = "#DCDCDC"
+frame_color = "#7d7d7d"
+timeout = 6
+
+[urgency_critical]
+background = "#D64937"
+foreground = "#DCDCDC"
+frame_color = "#D64937"
+timeout = 0
+
