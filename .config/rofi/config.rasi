@@ -1,0 +1,10 @@
+configuration {
+    modi: "drun,run,wifi:~/.local/bin/rofi-wifi.sh";
+    show-icons: true;
+    display-drun: " ";
+    display-run: " ";
+    display-window: " ";
+    display-wifi: "";
+    sidebar-mode: true;
+}
+
