@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+INTERFACE="${INTERFACE:-wlp3s0}"
+
+COLOR_GE80=${COLOR_GE80:-#00FF00}
+COLOR_GE60=${COLOR_GE60:-#FFF600}
+COLOR_GE40=${COLOR_GE40:-#FFAE00}
+COLOR_LOWR=${COLOR_LOWR:-#FF0000}
+COLOR_DOWN=${COLOR_DOWN:-#FF0000}
+
+# Перевірка чи підключено
+SSID=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes:' | cut -d: -f2)
+if [[ -z "$SSID" ]]; then
+    echo "down"
+    echo "down"
+    echo $COLOR_DOWN
+    exit
+fi
+
+# Отримуємо силу сигналу в процентах
+QUALITY=$(nmcli -t -f IN-USE,SIGNAL dev wifi | grep '^*:' | cut -d: -f2)
+QUALITY=${QUALITY:-0}
+
+# full text
+echo "${QUALITY}%"
+# short text
+echo "${QUALITY}%"
+
+# color
+if (( QUALITY >= 80 )); then
+    echo $COLOR_GE80
+elif (( QUALITY >= 60 )); then
+    echo $COLOR_GE60
+elif (( QUALITY >= 40 )); then
+    echo $COLOR_GE40
+else
+    echo $COLOR_LOWR
+fi
+
