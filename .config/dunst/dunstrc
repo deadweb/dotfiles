@@ -8,6 +8,7 @@ transparency = 0
 background = "#2D2D2D"
 foreground = "#DCDCDC"
 frame_color = "#7d7d7d"    # колір бордера
+icon_position = off
 
 # Позиція
 origin = top-right
