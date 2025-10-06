@@ -1,5 +1,6 @@
 [global]
-font = JetBrainsMono 10
+font = FiraCode Nerd Font Medium 10
+transparency = 8     # Від 0 до 10. 0 – непрозорий, 10 – максимально прозорий
 frame_width = 2            # товщина бордера
 corner_radius = 0          # закруглення
 padding = 8

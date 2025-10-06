@@ -129,7 +129,10 @@ bindsym $mod+Shift+Return exec kitty --class floating
 bindsym $mod+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id rofi -show drun
+#bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons -theme ~/.config/rofi/themes/default.rasi 
+# -theme ~/.config/rofi/themes/default.rasi
+
 
 # change focus
 bindsym $mod+$left focus left
@@ -272,6 +275,7 @@ exec_always --no-startup-id systemctl --user start i3-graphical-session
 exec_always --no-startup-id udisks-glue -f
 #exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
 exec_always --no-startup-id xinput disable "SynPS/2 Synaptics TouchPad"
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # Exec
 exec --no-startup-id nm-applet
@@ -281,3 +285,4 @@ exec --no-startup-id keepassxc
 exec --no-startup-id thunderbird
 exec --no-startup-id zotero
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id ~/.local/bin/terminals_layout
