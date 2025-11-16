@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+import subprocess
+import re
+
+UP_DEVICE = "/org/freedesktop/UPower/devices/battery_BAT0"
+
+def up(cmd):
+    return subprocess.check_output(cmd, text=True).strip()
+
+info = up(["upower", "-i", UP_DEVICE])
+
+def get(pattern):
+    m = re.search(pattern, info)
+    return m.group(1).strip() if m else None
+
+percentage = get(r"percentage:\s+(\d+)%")
+state = get(r"state:\s+(\w+)")
+time_full = get(r"time to full:\s+([\d\.]+ hours?)")
+time_empty = get(r"time to empty:\s+([\d\.]+ hours?)")
+
+# Визначення часу
+if state == "charging" and time_full:
+    time = f" ({time_full})"
+elif state == "discharging" and time_empty:
+    time = f" ({time_empty})"
+else:
+    time = ""
+
+# Іконки FontAwesome (Pango)
+FA_LIGHTNING = "<span font='FontAwesome'>\uf0e7</span>"
+FA_PLUG      = "<span font='FontAwesome'>\uf1e6</span>"
+FA_BATTERY   = "<span font='FontAwesome'>\uf240</span>"
+FA_QUESTION  = "<span font='FontAwesome'>\uf128</span>"
+
+# Вибір іконки за станом
+if state == "discharging":
+    icon = FA_BATTERY
+elif state == "charging":
+    icon = FA_LIGHTNING + " " + FA_PLUG
+elif state == "full":
+    icon = FA_PLUG
+else:
+    icon = FA_QUESTION + " " + FA_BATTERY
+
+# Текст
+fulltext = f"{icon} {percentage}%{time}"
+
+print(fulltext)
+print(fulltext)
+
+# критичний рівень
+if percentage and int(percentage) < 10:
+    exit(33)
+
