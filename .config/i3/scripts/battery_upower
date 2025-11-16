@@ -4,9 +4,7 @@ import subprocess
 import re
 import os
 
-# UPower device path
 UP_DEVICE = "/org/freedesktop/UPower/devices/battery_BAT0"
-
 config = dict(os.environ)
 
 def up(cmd):
@@ -18,29 +16,27 @@ def get(pattern):
     m = re.search(pattern, info)
     return m.group(1).strip() if m else None
 
-# Основні поля
 percentage = get(r"percentage:\s+(\d+)%")
 state = get(r"state:\s+(\w+)")
-time_full = get(r"time to full:\s+([\d\.]+ hours?)")
-time_empty = get(r"time to empty:\s+([\d\.]+ hours?)")
+time_full  = get(r"time to full:\s+([\d\.]+\s+\w+)")
+time_empty = get(r"time to empty:\s+([\d\.]+\s+\w+)")
 
 p = int(percentage) if percentage else 0
 
-# Визначення часу
-if state == "charging" and time_full:
-    time = f" ({time_full})"
-elif state == "discharging" and time_empty:
+# ----- ЧАС -----
+if state == "discharging" and time_empty:
     time = f" ({time_empty})"
+elif state == "charging" and time_full:
+    time = f" ({time_full})"
 else:
     time = ""
 
-# Іконки FontAwesome
+# ----- ІКОНКИ -----
 FA_LIGHTNING = "<span font='FontAwesome'>\uf0e7</span>"
 FA_PLUG      = "<span font='FontAwesome'>\uf1e6</span>"
 FA_BATTERY   = "<span font='FontAwesome'>\uf240</span>"
 FA_QUESTION  = "<span font='FontAwesome'>\uf128</span>"
 
-# Вибір іконки
 if state == "discharging":
     icon = FA_BATTERY
 elif state == "charging":
@@ -50,7 +46,7 @@ elif state == "full":
 else:
     icon = FA_QUESTION + " " + FA_BATTERY
 
-# Градація кольорів — як у твоєму старому скрипті
+# ----- КОЛЬОРИ -----
 def color(percent):
     if percent < 10:
         return config.get("color_10", "#FFFFFF")
@@ -74,11 +70,9 @@ colorized = f"<span color='{color(p)}'>{p}%</span>"
 
 fulltext = f"{icon} {colorized}{time}"
 
-# Вивід для i3blocks
 print(fulltext)
 print(fulltext)
 
-# Критичний рівень
 if p < 10:
     exit(33)
 
