@@ -3,9 +3,17 @@
 import subprocess
 import re
 import os
+from pathlib import Path
 
 UP_DEVICE = "/org/freedesktop/UPower/devices/battery_BAT0"
 config = dict(os.environ)
+
+LOG_PATH = Path.home() / ".cache/battery_cutoff.log"
+LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+# ----------------------------------------------------------
+# Виклики upower
+# ----------------------------------------------------------
 
 def up(cmd):
     return subprocess.check_output(cmd, text=True).strip()
@@ -16,14 +24,68 @@ def get(pattern):
     m = re.search(pattern, info)
     return m.group(1).strip() if m else None
 
-percentage = get(r"percentage:\s+(\d+)%")
+# ----------------------------------------------------------
+# Зчитування параметрів
+# ----------------------------------------------------------
+
 state = get(r"state:\s+(\w+)")
 time_full  = get(r"time to full:\s+([\d\.]+\s+\w+)")
 time_empty = get(r"time to empty:\s+([\d\.]+\s+\w+)")
 
-p = int(percentage) if percentage else 0
+energy_now  = float(get(r"energy:\s+([\d\.]+)\s+Wh") or 0.0)
+energy_full = float(get(r"energy-full:\s+([\d\.]+)\s+Wh") or 1.0)
 
-# ----- ЧАС -----
+# ----------------------------------------------------------
+# Автоматичний розрахунок ENERGY_CUTOFF
+# ----------------------------------------------------------
+
+DEFAULT_CUTOFF = 6.0
+
+def load_cutoff():
+    if not LOG_PATH.exists():
+        return DEFAULT_CUTOFF
+
+    values = []
+    with LOG_PATH.open() as f:
+        for line in f:
+            try:
+                values.append(float(line.strip()))
+            except:
+                pass
+
+    if len(values) < 3:
+        return values[-1] if values else DEFAULT_CUTOFF
+
+    # усереднений нижній поріг
+    return sum(values[-10:]) / min(len(values), 10)
+
+def save_cutoff_point(value):
+    with LOG_PATH.open("a") as f:
+        f.write(f"{value}\n")
+
+ENERGY_CUTOFF = load_cutoff()
+
+# ----------------------------------------------------------
+# Розрахунок реальних відсотків
+# ----------------------------------------------------------
+
+if energy_now <= ENERGY_CUTOFF:
+    p = 0
+else:
+    p = int((energy_now - ENERGY_CUTOFF) / (energy_full - ENERGY_CUTOFF) * 100)
+    p = max(0, min(100, p))
+
+# ----------------------------------------------------------
+# Якщо реальний заряд впав до нуля — записати точку вимкнення
+# ----------------------------------------------------------
+
+if p == 0 and energy_now > 0:
+    save_cutoff_point(energy_now)
+
+# ----------------------------------------------------------
+# Форматування часу
+# ----------------------------------------------------------
+
 if state == "discharging" and time_empty:
     time = f" ({time_empty})"
 elif state == "charging" and time_full:
@@ -31,7 +93,10 @@ elif state == "charging" and time_full:
 else:
     time = ""
 
-# ----- ІКОНКИ -----
+# ----------------------------------------------------------
+# Іконки
+# ----------------------------------------------------------
+
 FA_LIGHTNING = "<span font='FontAwesome'>\uf0e7</span>"
 FA_PLUG      = "<span font='FontAwesome'>\uf1e6</span>"
 FA_BATTERY   = "<span font='FontAwesome'>\uf240</span>"
@@ -39,14 +104,17 @@ FA_QUESTION  = "<span font='FontAwesome'>\uf128</span>"
 
 if state == "discharging":
     icon = FA_BATTERY
-elif state == "charging":
+elif state in ("charging", "pending-charge"):
     icon = FA_LIGHTNING + " " + FA_PLUG
-elif state == "full":
+elif state in ("full", "fully-charged"):
     icon = FA_PLUG
 else:
     icon = FA_QUESTION + " " + FA_BATTERY
 
-# ----- КОЛЬОРИ -----
+# ----------------------------------------------------------
+# Кольори
+# ----------------------------------------------------------
+
 def color(percent):
     if percent < 10:
         return config.get("color_10", "#FFFFFF")
@@ -67,11 +135,14 @@ def color(percent):
     return config.get("color_full", "#FFFFFF")
 
 colorized = f"<span color='{color(p)}'>{p}%</span>"
-
 fulltext = f"{icon} {colorized}{time}"
 
 print(fulltext)
 print(fulltext)
+
+# ----------------------------------------------------------
+# Вихідний код при низькому заряді
+# ----------------------------------------------------------
 
 if p < 10:
     exit(33)
