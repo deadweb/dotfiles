@@ -245,12 +245,12 @@ for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
 
 # Move windows to workspaces
 
-for_window [class="librewolf-default"] layout tabbed, move to workspace $ws2
+for_window [class="librewolf-default"] move to workspace $ws2
 for_window [class="Chromium"] layout tabbed, move to workspace $ws2
 
 for_window [class="obsidian"] layout tabbed, move to workspace $ws3 
 for_window [class="google_ads_editor.exe"] layout tabbed, move to workspace $ws3
-for_window [class="libreoffice"] layout tabbed, move to workspace $ws3
+for_window [class="libreoffice"] move to workspace $ws3
 for_window [class="Zathura"] move to workspace $ws3
 
 for_window [class="Element"] layout tabbed, move to workspace $ws4
