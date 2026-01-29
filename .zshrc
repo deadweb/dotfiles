@@ -107,3 +107,6 @@ source $ZSH/oh-my-zsh.sh
 if [ -f ~/.config/aliases ]; then
 	. ~/.config/aliases
 fi
+
+# Created by `pipx` on 2026-01-29 05:07:38
+export PATH="$PATH:/home/user/.local/bin"

@@ -17,9 +17,9 @@
 
 /* Всі зображення у нотатках Obsidian */
 .markdown-preview-view img {
-    width: 80%;          /* ширина під контейнер */
+    max-width: 80%;          /* ширина під контейнер */
     max-width: 600px;    /* максимальна ширина */
-    min-width: 600px;     /* мінімальна ширина */
+/*    min-width: 600px; */    /* мінімальна ширина */
     height: auto;         /* пропорційна висота */
     display: block;       
     margin: 0.5em 0;      
@@ -230,3 +230,42 @@ li.task-list-item ul.has-list-bullet {
   margin-top: -2em !important;  /* мінімальний відступ над footnotes */
   padding-top: 0 !important;
 }
+
+/* Зменшення вертикального відступу між 1-м та 2-м рівнем списку */
+.markdown-rendered li > ul,
+.markdown-rendered li > ol {
+  margin-top: 1px !important;    /* Від’ємне значення підтягує 2-й рівень вище до 1-го */
+  margin-bottom: 0px !important;
+}
+
+/* Прибираємо зайві відступи у самих елементів списку */
+.markdown-rendered li {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+/* Прибираємо лінію та відступи для вбудованих нотаток ![[ ]] */
+.markdown-embed,
+.markdown-rendered .markdown-embed,
+.markdown-source-view.mod-cm6 .cm-content .markdown-embed {
+  border-left: none !important;
+  border: none !important; /* Прибирає рамку повністю */
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Очищуємо внутрішній контент вбудовування */
+.markdown-embed-content,
+.markdown-embed-content > .markdown-rendered {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Прибираємо заголовок та кнопку посилання для "безшовного" вигляду */
+.markdown-embed-title,
+.markdown-embed-link {
+  display: none !important;
+}
+
