@@ -9,3 +9,15 @@ configuration {
     sidebar-mode: true;
 }
 
+window {
+    /* location 2 — це верх по центру */
+    location:         2;
+    anchor:           north;
+    
+    /* Відступ зверху: позитивне число опускає блок вниз */
+    /* Спробуйте змінити 200 на 300 або 400, поки не стане як треба */
+    y-offset:         1000px; 
+    
+    x-offset:         0;
+    width:            600px;
+}
