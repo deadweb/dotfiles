@@ -133,7 +133,6 @@ bindsym $mod+q kill
 bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons -theme ~/.config/rofi/themes/default.rasi 
 # -theme ~/.config/rofi/themes/default.rasi
 
-
 # change focus
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
@@ -200,6 +199,9 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Блокування екрана (Mod + Shift + L)
+bindsym $mod+F2 exec --no-startup-id i3lock-fancy -g
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -276,6 +278,9 @@ exec_always --no-startup-id udisks-glue -f
 #exec_always --no-startup-id xinput set-int-prop 11 'Device Enabled' 8 0
 exec_always --no-startup-id xinput disable "SynPS/2 Synaptics TouchPad"
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+# Вимикаємо автоматичне блокування через час простою
+exec_always --no-startup-id xset s off
+exec_always --no-startup-id xset -dpms
 
 # Exec
 #exec --no-startup-id nm-applet
@@ -285,6 +290,6 @@ exec --no-startup-id keepassxc
 exec --no-startup-id thunderbird
 exec --no-startup-id zotero
 #exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -g
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -g # Дозволяє блокувати при переході в сон (кришка ноутбука)
 exec --no-startup-id ~/.local/bin/terminals_layout
 exec --no-startup-id udiskie -t
