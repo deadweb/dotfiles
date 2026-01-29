@@ -284,5 +284,7 @@ exec --no-startup-id element-desktop
 exec --no-startup-id keepassxc
 exec --no-startup-id thunderbird
 exec --no-startup-id zotero
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -g
 exec --no-startup-id ~/.local/bin/terminals_layout
+exec --no-startup-id udiskie -t

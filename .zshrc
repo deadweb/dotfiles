@@ -110,3 +110,13 @@ fi
 
 # Created by `pipx` on 2026-01-29 05:07:38
 export PATH="$PATH:/home/user/.local/bin"
+
+
+function r() {
+    temp_file="$(mktemp -t "ranger_cd.XXXXXXXXXX")"
+    ranger --choosedir="$temp_file" -- "${@:-$PWD}"
+    if chosen_dir="$(cat -- "$temp_file")" && [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ]; then
+        cd -- "$chosen_dir"
+    fi
+    rm -f -- "$temp_file"
+}
