@@ -269,3 +269,37 @@ li.task-list-item ul.has-list-bullet {
   display: none !important;
 }
 
+/* Вмикаємо внутрішні лінії для всіх комірок */
+.dataview.table-view-table {
+    border-collapse: collapse !important;
+    border: none !important; /* Прибираємо зовнішню рамку всієї таблиці */
+}
+
+.dataview.table-view-table th,
+.dataview.table-view-table td {
+    border: 1px solid var(--background-modifier-border) !important;
+}
+
+/* Видаляємо лінії по краях (периметру) */
+
+/* Зліва */
+.dataview.table-view-table th:first-child,
+.dataview.table-view-table td:first-child {
+    border-left: none !important;
+}
+
+/* Справа */
+.dataview.table-view-table th:last-child,
+.dataview.table-view-table td:last-child {
+    border-right: none !important;
+}
+
+/* Зверху (над заголовками) */
+.dataview.table-view-table thead th {
+    border-top: none !important;
+}
+
+/* Знизу (під останнім рядком) */
+.dataview.table-view-table tbody tr:last-child td {
+    border-bottom: none !important;
+}

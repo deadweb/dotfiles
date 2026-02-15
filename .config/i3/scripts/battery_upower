@@ -1,149 +1,126 @@
 #!/usr/bin/env python3
-
 import subprocess
 import re
 import os
+import time
 from pathlib import Path
 
+# --- КОНФІГУРАЦІЯ ---
 UP_DEVICE = "/org/freedesktop/UPower/devices/battery_BAT0"
-config = dict(os.environ)
-
 LOG_PATH = Path.home() / ".cache/battery_cutoff.log"
-LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+PB_MODE_FLAG = Path("/tmp/powerbank_mode.flag")
+PWR_FLAG = Path("/tmp/power_save_active.flag")
 
-# ----------------------------------------------------------
-# Виклики upower
-# ----------------------------------------------------------
+def get_upower_data():
+    try:
+        res = subprocess.check_output(["upower", "-i", UP_DEVICE], text=True)
+        now_match = re.search(r"energy:\s+([\d,.]+)", res)
+        full_match = re.search(r"energy-full:\s+([\d,.]+)", res)
+        st_match = re.search(r"state:\s+(\w+)", res)
+        time_match = re.search(r"time to (?:empty|full):\s+([\d,.]+\s+\w+)", res)
+        
+        e_now = float(now_match.group(1).replace(',', '.')) if now_match else 0.0
+        e_full = float(full_match.group(1).replace(',', '.')) if full_match else 1.0
+        state = st_match.group(1).strip().lower() if st_match else "unknown"
+        time_left = time_match.group(1) if time_match else "невідомо"
+        return e_now, e_full, state, time_left
+    except:
+        return 0.0, 1.0, "unknown", ""
 
-def up(cmd):
-    return subprocess.check_output(cmd, text=True).strip()
+def load_cutoff(e_full):
+    if not LOG_PATH.exists() or os.path.getsize(LOG_PATH) == 0:
+        return 4.0
+    try:
+        with open(LOG_PATH, 'r') as f:
+            values = [float(l.strip().replace(',', '.')) for l in f if l.strip()]
+        avg = sum(values[-5:]) / len(values[-5:])
+        return min(avg, 10.0, e_full * 0.15)
+    except:
+        return 4.0
 
-info = up(["upower", "-i", UP_DEVICE])
+# Отримуємо дані
+energy_now, energy_full, state, time_left = get_upower_data()
+cutoff = load_cutoff(energy_full)
 
-def get(pattern):
-    m = re.search(pattern, info)
-    return m.group(1).strip() if m else None
-
-# ----------------------------------------------------------
-# Зчитування параметрів
-# ----------------------------------------------------------
-
-state = get(r"state:\s+(\w+)")
-time_full  = get(r"time to full:\s+([\d\.]+\s+\w+)")
-time_empty = get(r"time to empty:\s+([\d\.]+\s+\w+)")
-
-energy_now  = float(get(r"energy:\s+([\d\.]+)\s+Wh") or 0.0)
-energy_full = float(get(r"energy-full:\s+([\d\.]+)\s+Wh") or 1.0)
-
-# ----------------------------------------------------------
-# Автоматичний розрахунок ENERGY_CUTOFF
-# ----------------------------------------------------------
-
-DEFAULT_CUTOFF = 6.0
-
-def load_cutoff():
-    if not LOG_PATH.exists():
-        return DEFAULT_CUTOFF
-
-    values = []
-    with LOG_PATH.open() as f:
-        for line in f:
-            try:
-                values.append(float(line.strip()))
-            except:
-                pass
-
-    if len(values) < 3:
-        return values[-1] if values else DEFAULT_CUTOFF
-
-    # усереднений нижній поріг
-    return sum(values[-10:]) / min(len(values), 10)
-
-def save_cutoff_point(value):
-    with LOG_PATH.open("a") as f:
-        f.write(f"{value}\n")
-
-ENERGY_CUTOFF = load_cutoff()
-
-# ----------------------------------------------------------
-# Розрахунок реальних відсотків
-# ----------------------------------------------------------
-
-if energy_now <= ENERGY_CUTOFF:
+# Розрахунок відсотків
+p_raw = int((energy_now - cutoff) / (energy_full - cutoff) * 100) if energy_full > cutoff else 0
+if state in ("full", "fully-charged") or p_raw >= 95:
+    p = 100
+elif energy_now <= cutoff:
     p = 0
 else:
-    p = int((energy_now - ENERGY_CUTOFF) / (energy_full - ENERGY_CUTOFF) * 100)
-    p = max(0, min(100, p))
+    p = max(0, min(100, p_raw))
 
-# ----------------------------------------------------------
-# Якщо реальний заряд впав до нуля — записати точку вимкнення
-# ----------------------------------------------------------
+# --- КЕРУВАННЯ КЛІКАМИ ---
+btn = os.environ.get("BLOCK_BUTTON")
+if btn == "1":
+    msg = f"Статус: {state}\nЗалишилось: {time_left}\nЕнергія: {energy_now:.2f} Wh"
+    subprocess.run(["notify-send", "-a", "Power", "Статус батареї", msg])
+elif btn == "3":
+    if state == "discharging":
+        subprocess.run(["notify-send", "-u", "critical", "-a", "Power", "Режим", "Неможливо вимкнути економію при розрядці"])
+    else:
+        if PB_MODE_FLAG.exists():
+            PB_MODE_FLAG.unlink()
+            subprocess.run(["notify-send", "-a", "Power", "Режим", "Продуктивний режим (AC)"])
+        else:
+            PB_MODE_FLAG.touch()
+            subprocess.run(["notify-send", "-a", "Power", "Режим", "Економія (Powerbank)"])
 
-if p == 0 and energy_now > 0:
-    save_cutoff_point(energy_now)
+# --- РОЗУМНА ЕКОНОМІЯ ТА ЗАХИСТ ---
+is_eco_active = state == "discharging" or PB_MODE_FLAG.exists()
 
-# ----------------------------------------------------------
-# Форматування часу
-# ----------------------------------------------------------
-
-if state == "discharging" and time_empty:
-    time = f" ({time_empty})"
-elif state == "charging" and time_full:
-    time = f" ({time_full})"
+if is_eco_active:
+    if not PWR_FLAG.exists():
+        # Максимальне енергозбереження
+        subprocess.run(["cpupower", "frequency-set", "-g", "schedutil"], capture_output=True)
+        subprocess.run(["cpupower", "set", "-b", "15"], capture_output=True)
+        subprocess.run(["rfkill", "block", "bluetooth"], capture_output=True)
+        subprocess.run(["iw", "dev", "wlan0", "set", "power_save", "on"], capture_output=True)
+        subprocess.run(["brillo", "-S", "65", "-q"])
+        PWR_FLAG.touch()
+    
+    # ПЕРЕВІРКА ПЕРЕД ВИМКНЕННЯМ (тільки при розрядці)
+    if state == "discharging":
+        # Попередження на 20%
+        if 16 <= p <= 20:
+            subprocess.run(["notify-send", "-u", "critical", "-a", "Power", "НИЗЬКИЙ ЗАРЯД", f"Залишилось {p}%. Скоро гібернація!"])
+        
+        # Поріг гібернації 15%
+        if p <= 15:
+            subprocess.run(["notify-send", "-u", "critical", "-a", "Power", "КРИТИЧНИЙ ЗАРЯД", "15% досягнуто. Гібернація через 5 секунд!"])
+            time.sleep(5)
+            # Перевірка, чи не підключили зарядку за ці 5 сек
+            _, _, current_state, _ = get_upower_data()
+            if current_state == "discharging":
+                subprocess.run(["systemctl", "hibernate"])
 else:
-    time = ""
+    if PWR_FLAG.exists():
+        # Повернення до продуктивності
+        subprocess.run(["cpupower", "frequency-set", "-g", "performance"], capture_output=True)
+        subprocess.run(["cpupower", "set", "-b", "0"], capture_output=True)
+        subprocess.run(["rfkill", "unblock", "bluetooth"], capture_output=True)
+        subprocess.run(["iw", "dev", "wlan0", "set", "power_save", "off"], capture_output=True)
+        subprocess.run(["brillo", "-S", "85", "-q"])
+        PWR_FLAG.unlink(missing_ok=True)
 
-# ----------------------------------------------------------
-# Іконки
-# ----------------------------------------------------------
-
-FA_LIGHTNING = "<span font='FontAwesome'>\uf0e7</span>"
-FA_PLUG      = "<span font='FontAwesome'>\uf1e6</span>"
-FA_BATTERY   = "<span font='FontAwesome'>\uf240</span>"
-FA_QUESTION  = "<span font='FontAwesome'>\uf128</span>"
-
-if state == "discharging":
-    icon = FA_BATTERY
-elif state in ("charging", "pending-charge"):
-    icon = FA_LIGHTNING + " " + FA_PLUG
-elif state in ("full", "fully-charged"):
-    icon = FA_PLUG
+# --- ВИВІД ДЛЯ ПАНЕЛІ ---
+if state == "charging":
+    icon = "\uf1e6"
+elif state in ("full", "fully-charged") or (p == 100 and state != "discharging"):
+    icon = "\uf1e6"
 else:
-    icon = FA_QUESTION + " " + FA_BATTERY
+    icon = "\uf240"
 
-# ----------------------------------------------------------
-# Кольори
-# ----------------------------------------------------------
+# Колір: Ціан (економія), Червоний (критично), Білий (норма)
+if is_eco_active:
+    main_color = "#00FFFF"
+elif p <= 15:
+    main_color = "#FF3300"
+else:
+    main_color = "#FFFFFF"
 
-def color(percent):
-    if percent < 10:
-        return config.get("color_10", "#FFFFFF")
-    if percent < 20:
-        return config.get("color_20", "#FF3300")
-    if percent < 30:
-        return config.get("color_30", "#FF6600")
-    if percent < 40:
-        return config.get("color_40", "#FF9900")
-    if percent < 50:
-        return config.get("color_50", "#FFCC00")
-    if percent < 60:
-        return config.get("color_60", "#FFFF00")
-    if percent < 70:
-        return config.get("color_70", "#FFFF33")
-    if percent < 80:
-        return config.get("color_80", "#FFFF66")
-    return config.get("color_full", "#FFFFFF")
-
-colorized = f"<span color='{color(p)}'>{p}%</span>"
-fulltext = f"{icon} {colorized}{time}"
+fulltext = f"<span color='{main_color}' font='FontAwesome'>{icon} {p}%</span>"
 
 print(fulltext)
 print(fulltext)
-
-# ----------------------------------------------------------
-# Вихідний код при низькому заряді
-# ----------------------------------------------------------
-
-if p < 10:
-    exit(33)
-

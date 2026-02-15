@@ -1,34 +1,51 @@
 [global]
-font = FiraCode Nerd Font Medium 10
-transparency = 8     # Від 0 до 10. 0 – непрозорий, 10 – максимально прозорий
-frame_width = 2            # товщина бордера
-corner_radius = 0          # закруглення
-padding = 8
-transparency = 0
-background = "#2D2D2D"
-foreground = "#DCDCDC"
-frame_color = "#7d7d7d"    # колір бордера
-icon_position = off
+    ### Шрифти та вигляд ###
+    font = FiraCode Nerd Font Medium 10
+    # 0 - непрозорий. Для прозорості краще використовувати picom.
+    transparency = 0 
+    frame_width = 2
+    corner_radius = 0
+    padding = 12
+    horizontal_padding = 12
+    
+    ### Кольори за замовчуванням ###
+    background = "#2D2D2D"
+    foreground = "#DCDCDC"
+    frame_color = "#7d7d7d"
+    
+    ### Прогрес-бар (ВАЖЛИВО для звуку) ###
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    # Колір заповненої смужки (наш ціан)
+    highlight = "#00ffff"
 
-# Позиція
-origin = top-right
-offset = 10x35             # відступ від правого і верхнього краю
+    ### Позиція ###
+    icon_position = off
+    origin = top-right
+    offset = 10x35
+    # Відстань між декількома повідомленнями
+    separator_height = 2
+    # Максимальна висота повідомлення
+    notification_limit = 5
 
 [urgency_low]
-background = "#232323"
-foreground = "#7d7d7d"
-frame_color = "#232323"
-timeout = 4
+    background = "#2D2D2D"
+    foreground = "#7d7d7d"
+    frame_color = "#7d7d7d"
+    timeout = 4
 
 [urgency_normal]
-background = "#2D2D2D"
-foreground = "#DCDCDC"
-frame_color = "#7d7d7d"
-timeout = 6
+    background = "#2D2D2D"
+    foreground = "#DCDCDC"
+    frame_color = "#7d7d7d"
+    timeout = 6
 
 [urgency_critical]
-background = "#D64937"
-foreground = "#DCDCDC"
-frame_color = "#D64937"
-timeout = 0
-
+    background = "#D64937"
+    foreground = "#DCDCDC"
+    frame_color = "#D64937"
+    # Краще поставити тайм-аут, щоб "Mute" не висів вічно
+    timeout = 5

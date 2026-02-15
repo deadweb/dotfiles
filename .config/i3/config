@@ -17,7 +17,6 @@ set $mod Mod4
 
 #set $refresh_i3status killall -SIGUSR1 i3status
 
-
 set $wallpaper $HOME/.config/i3/x220.png
 
 # Define names for default workspaces for which we configure key bindings later on.
@@ -106,10 +105,14 @@ bindsym --release Print exec scrot "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S
 bindsym --release Shift+Print exec scrot -fs "$HOME/Pictures/Screenshots/%Y.%m.%d_%H:%M:%S.png"
 
 # Use pactl to adjust volume in PulseAudio.
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && ~/.local/bin/dunstify-volume.sh
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && ~/.local/bin/dunstify-volume.sh
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/.local/bin/dunstify-volume.sh
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && ~/.local/bin/dunstify-volume.sh
+#bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && ~/.local/bin/dunstify-volume.sh
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/bin/volume.sh up
+#bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && ~/.local/bin/dunstify-volume.sh
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/volume.sh down
+#bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/.local/bin/dunstify-volume.sh
+bindsym XF86AudioMute exec --no-startup-id ~/.local/bin/volume.sh mute
+#bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && ~/.local/bin/dunstify-volume.sh
+bindsym XF86AudioMicMute exec --no-startup-id ~/.local/bin/volume.sh micmute
 
 ### / Управління яскравістю екрана
 bindsym XF86MonBrightnessDown exec --no-startup-id brillo -q -U 5
@@ -248,7 +251,7 @@ for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
 
 # Move windows to workspaces
 
-for_window [class="librewolf-default"] move to workspace $ws2
+for_window [class="librewolf"] move to workspace $ws2
 for_window [class="Chromium"] layout tabbed, move to workspace $ws2
 
 for_window [class="obsidian"] layout tabbed, move to workspace $ws3 
@@ -259,6 +262,7 @@ for_window [class="Zathura"] move to workspace $ws3
 for_window [class="Element"] layout tabbed, move to workspace $ws4
 for_window [class="Viber"] layout tabbed, move to workspace $ws4
 for_window [class="thunderbird-default"] layout tabbed, move to workspace $ws4
+for_window [class="discord"] layout tabbed, move to workspace $ws4
 
 for_window [class="Zotero"] layout tabbed, move to workspace $ws5
 for_window [class="transmission-gtk"] layout tabbed, move to workspace $ws5
@@ -271,8 +275,9 @@ for_window [class="zoom"] layout tabbed, move to workspace $ws5
 # Exec_always
 exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 exec_always --no-startup-id feh --bg-scale $wallpaper
-exec_always --no-startup-id kbdd & exec --no-startup-id setxkbmap -layout "us, ua" -option "grp:alt_shift_toggle" 
-#exec_always --no-startup-id picom --experimental-backends --config ~/.config/picom/config
+exec_always --no-startup-id kbdd 
+exec_always --no-startup-id setxkbmap -layout "us, ua" -option "grp:alt_shift_toggle" 
+exec_always --no-startup-id picom -b --config ~/.config/picom.conf
 exec_always --no-startup-id syncthing --no-browser
 exec_always --no-startup-id systemctl --user start i3-graphical-session
 exec_always --no-startup-id udisks-glue -f
@@ -288,6 +293,7 @@ exec_always --no-startup-id xset -dpms
 exec --no-startup-id udiskie &
 exec --no-startup-id element-desktop
 exec --no-startup-id keepassxc
+exec --no-startup-id obsidian
 exec --no-startup-id thunderbird
 exec --no-startup-id zotero
 #exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
