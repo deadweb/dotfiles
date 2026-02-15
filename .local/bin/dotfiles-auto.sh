@@ -19,15 +19,15 @@ send_notification() {
 
 # Перевіряємо зміни
 if ! dotfiles diff-index --quiet HEAD --; then
-    notify-send -u low "Dotfiles" " Знайдено зміни конфігурації, починаю оновлення..."
+    notify-send -u low " Dotfiles" "Знайдено зміни конфігурації, починаю оновлення..."
     
     dotfiles add -u
     
     if dotfiles commit -m "Auto-update $(date '+%Y-%m-%d %H:%M:%S')"; then
         if dotfiles push origin main; then
-            notify-send "Конфігурації успішно оновлено на GitHub"
+            notify-send -u low " Dotfiles" "Конфігурації успішно оновлено на GitHub"
         else
-            notify-send "Помилка при відправці на GitHub!"
+            notify-send -u low " Dotfiles" "Помилка при відправці на GitHub!"
         fi
     fi
 else
