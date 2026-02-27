@@ -275,8 +275,8 @@ for_window [class="zoom"] layout tabbed, move to workspace $ws5
 # Exec_always
 exec_always --no-startup-id dunst -config ~/.config/dunst/dunstrc
 exec_always --no-startup-id feh --bg-scale $wallpaper
-exec_always --no-startup-id kbdd 
-exec_always --no-startup-id setxkbmap -layout "us, ua" -option "grp:alt_shift_toggle" 
+#exec_always --no-startup-id kbdd 
+exec_always --no-startup-id kbdd & setxkbmap -layout "us, ua" -option "grp:alt_shift_toggle" 
 exec_always --no-startup-id picom -b --config ~/.config/picom.conf
 exec_always --no-startup-id syncthing --no-browser
 exec_always --no-startup-id systemctl --user start i3-graphical-session
