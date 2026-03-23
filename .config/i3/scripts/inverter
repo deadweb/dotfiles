@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+import os
+import requests
+import netrc
+import urllib.parse
+import subprocess
+from pathlib import Path
+
+# --- КОНФІГУРАЦІЯ ---
+DEVICE_PARAMS = {
+    "action": "webQueryDeviceEnergyFlowEs",
+    "source": "1",
+    "devcode": "6514",
+    "pn": "E50000253754058246",
+    "devaddr": "1",
+    "sn": "99532509100630"
+}
+
+GRID_OFF_FLAG = Path("/tmp/inv_grid_off.flag")
+
+def send_alert(title, msg, critical=False):
+    urgency = "critical" if critical else "normal"
+    subprocess.run(["notify-send", "-u", urgency, "-a", "Inverter", title, msg])
+
+def get_inverter_data():
+    try:
+        secrets = netrc.netrc().authenticators("dessmonitor.com")
+        if not secrets: return None
+        token, sign, salt = secrets
+        
+        params = {**DEVICE_PARAMS, "token": token, "sign": sign, "salt": salt}
+        url = "https://web.dessmonitor.com/public/?" + urllib.parse.urlencode(params)
+        
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        data = r.json()
+        
+        if data.get("success") and "dat" in data:
+            d = data["dat"]
+            res = {"load_w": 0, "bat_p_w": 0, "soc": 0, "grid_p_w": 0}
+
+            # Парсимо споживання будинку
+            for item in d.get("bc_status", []):
+                if item.get("par") == "load_active_power":
+                    res["load_w"] = abs(int(float(item.get("val", 0)) * 1000))
+
+            # Парсимо стан батареї
+            for item in d.get("bt_status", []):
+                if item.get("par") == "battery_active_power":
+                    res["bat_p_w"] = int(float(item.get("val", 0)) * 1000)
+                if item.get("par") == "bt_battery_capacity":
+                    res["soc"] = int(float(item.get("val", 0)))
+
+            # Парсимо стан мережі
+            for item in d.get("gd_status", []):
+                if item.get("par") == "grid_active_power":
+                    res["grid_p_w"] = int(float(item.get("val", 0)) * 1000)
+
+            return res
+    except:
+        return None
+    return None
+
+# --- ЛОГІКА ТА ВИВІД ---
+data = get_inverter_data()
+if not data:
+    print(""); exit()
+
+# Сповіщення про зникнення/появу світла
+if data["grid_p_w"] == 0 and data["load_w"] > 0:
+    if not GRID_OFF_FLAG.exists():
+        send_alert("БЛЕКАУТ", "Живлення від акумулятора", critical=True)
+        GRID_OFF_FLAG.touch()
+else:
+    if GRID_OFF_FLAG.exists():
+        send_alert("МЕРЕЖА OK", "Світло з'явилося")
+        GRID_OFF_FLAG.unlink(missing_ok=True)
+
+# --- ЗАПИС У ЛОГ ДЛЯ В'ЮВЕРА ---
+LOG_FILE = Path.home() / ".local/bin/inverter_data.log"
+try:
+    # Формат: Час Споживання SOC Потік_АКБ Мережа
+    import datetime
+    now = datetime.datetime.now().strftime("%H:%M:%S")
+    log_line = f"{now} {data['load_w']} {data['soc']} {data['bat_p_w']} {data['grid_p_w']}\n"
+    
+    with open(LOG_FILE, "a") as f:
+        f.write(log_line)
+    
+    # Ротація логу (тримати останні 1440 записів = 24 години)
+    lines = open(LOG_FILE).readlines()
+    if len(lines) > 1440:
+        with open(LOG_FILE, "w") as f:
+            f.writelines(lines[-1440:])
+except Exception as e:
+    pass # Логування не повинно ламати i3bar
+
+# Формування рядка для i3bar
+icon = ""
+if data["bat_p_w"] < -5: 
+    # Розряд (червоний)
+    color = "#FF3300"
+    status = f" <span color='{color}'>{data['load_w']}W (↓{abs(data['bat_p_w'])}W)</span>"
+elif data["bat_p_w"] > 5:
+    # Заряд (жовтий)
+    color = "#FFFF00"
+    status = f" <span color='{color}'>{data['load_w']}W (↑{data['bat_p_w']}W)</span>"
+else:
+    # Мережа/Спокій (синій)
+    color = "#00BFFF"
+    status = f" <span color='#FFFFFF'>{data['load_w']}W</span>"
+
+# Вивід основного тексту
+print(f"<span color='{color}' font='FontAwesome'>{icon}</span>{status}")
+
+# Вивід іконки (для стиснутого вигляду)
+print(icon)
+
+# Детальна інформація при кліку (LMB)
+if os.environ.get("BLOCK_BUTTON") == "1":
+    msg = (f"Споживання: {data['load_w']} Вт\n"
+           f"АКБ: {data['soc']}%\n"
+           f"Потік АКБ: {data['bat_p_w']} Вт\n"
+           f"Мережа: {data['grid_p_w']} Вт")
+    subprocess.run(["notify-send", "-a", "Inverter", "Стан енергосистеми", msg])
