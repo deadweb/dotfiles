@@ -18,7 +18,7 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 #alias dotpush='f() { git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME add -f "$1";  git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME commit -m "${2:-update}"; git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME push -u origin main --force; }; f'
 alias dotpush='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME add -u && git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME commit -m "update $(date +%Y-%m-%d)" && git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME push origin main'
 alias du='sudo apt dist-upgrade'
-alias fetch='~/.local/bin/fastfetch'
+alias fetch='fastfetch'
 alias fetchrc='vim ~/.config/fastfetch/config.conf'
 alias install='sudo apt install'
 #alias ls='lsd'
@@ -45,6 +45,7 @@ alias ytdv='yt-dlp -f "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[h
 alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
 alias synctasks='/usr/bin/env python3 /home/user/.local/bin/sync_tasks.py'
 #alias fetch = '/usr/bin/fastfetch'
+alias inverter='$HOME/.local/bin/inverter.sh'
 
 ## Files
 
