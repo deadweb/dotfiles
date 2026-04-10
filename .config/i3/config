@@ -268,6 +268,9 @@ for_window [class="Zotero"] layout tabbed, move to workspace $ws5
 for_window [class="transmission-gtk"] layout tabbed, move to workspace $ws5
 for_window [class="zoom"] layout tabbed, move to workspace $ws5
 
+for_window [class="Gramps"] layout tabbed, move to workspace $ws5
+for_window [class="gramps"] layout tabbed, move to workspace $ws5
+
 ######################
 # Launching programs #
 ######################
