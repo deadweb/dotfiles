@@ -46,6 +46,8 @@ alias yts='i3-msg split h & i3-msg layout tabbed & ytfzf -c S'
 alias synctasks='/usr/bin/env python3 /home/user/.local/bin/sync_tasks.py'
 #alias fetch = '/usr/bin/fastfetch'
 alias inverter='$HOME/.local/bin/inverter.sh'
+alias m4a2mp3='for f in *.m4a; do ffmpeg -y -i "$f" -codec:a libmp3lame -qscale:a 2 "${f%.m4a}.mp3" && rm -f "$f"; done'
+alias opus2mp3='for f in *.opus; do ffmpeg -y -i "$f" -codec:a libmp3lame -qscale:a 2 "${f%.opus}.mp3" && rm -f "$f"; done'
 
 ## Files
 
