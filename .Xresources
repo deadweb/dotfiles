@@ -36,3 +36,4 @@ URxvt.perl-ext-common: default,clipboard
 URxvt.keysym.Control-Shift-C: eval:selection_to_clipboard
 URxvt.keysym.Control-Shift-V: eval:paste_clipboard
 
+Xft.dpi: 96
