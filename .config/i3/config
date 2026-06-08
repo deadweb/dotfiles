@@ -303,3 +303,5 @@ exec --no-startup-id zotero
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -g # Дозволяє блокувати при переході в сон (кришка ноутбука)
 exec --no-startup-id ~/.local/bin/terminals_layout
 exec --no-startup-id udiskie -t
+# Автозапуск сховища ключів для Chromium/Chrome
+exec --no-startup-id gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
