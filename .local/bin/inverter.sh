@@ -43,7 +43,6 @@ while true; do
     TOTAL_LOG_LINES=$(echo "$raw_data" | wc -l)
     STEP=$(awk -v total=$TOTAL_LOG_LINES -v need=$POINTS_NEEDED 'BEGIN {print total/need}')
     
-    # Дані: $2 - навантаження, $4 - струм АКБ (позитивний = заряд, негативний = розряд)
     pwr_history=($(echo "$raw_data" | awk -v s=$STEP -v n=$POINTS_NEEDED 'BEGIN {for(i=0;i<n;i++) idx[i]=int(i*s+1)} {for(j=0;j<n;j++) if(NR==idx[j]) val[j]=$2} END {for(k=0;k<n;k++) printf "%d ", val[k]}'))
     bat_history=($(echo "$raw_data" | awk -v s=$STEP -v n=$POINTS_NEEDED 'BEGIN {for(i=0;i<n;i++) idx[i]=int(i*s+1)} {for(j=0;j<n;j++) if(NR==idx[j]) val[j]=$4} END {for(k=0;k<n;k++) printf "%d ", val[k]}'))
     time_history=($(echo "$raw_data" | awk -v s=$STEP -v n=$POINTS_NEEDED 'BEGIN {for(i=0;i<n;i++) idx[i]=int(i*s+1)} {for(j=0;j<n;j++) if(NR==idx[j]) val[j]=$1} END {for(k=0;k<n;k++) printf "%s ", val[k]}'))
@@ -51,12 +50,9 @@ while true; do
     last_row=$(echo "$raw_data" | tail -n 1)
     read last_time last_pwr last_soc last_bat_p <<< $(echo "$last_row" | awk '{print $1, $2, $3, $4}')
     
-    MAX_PWR=1; for i in $pwr_history; do [[ $i -gt $MAX_PWR ]] && MAX_PWR=$i; done
-    # Для батареї беремо абсолютне значення максимуму (заряд або розряд)
+    MAX_PWR=1; for i in $pwr_history; do [[ ${i#-} -gt $MAX_PWR ]] && MAX_PWR=${i#-}; done
     MAX_BAT=1; for i in $bat_history; do val=${i#-}; [[ $val -gt $MAX_BAT ]] && MAX_BAT=$val; done
-    
-    [[ $MAX_PWR -lt 4 ]] && MAX_PWR=4
-    [[ $MAX_BAT -lt 4 ]] && MAX_BAT=4
+    [[ $MAX_PWR -lt 4 ]] && MAX_PWR=4; [[ $MAX_BAT -lt 4 ]] && MAX_BAT=4
 
     if [[ $last_bat_p -lt -5 ]]; then BS="${RED}РОЗРЯД (↓${last_bat_p#-}W)${NC}"
     elif [[ $last_bat_p -gt 5 ]]; then BS="${YELLOW}ЗАРЯД (↑${last_bat_p}W)${NC}"
@@ -64,10 +60,9 @@ while true; do
 
     clear
     draw_line "=" "МОНІТОР ІНВЕРТОРА"
-    printf " %s | АКБ: ${GREEN}%s %%${NC} | %b | Навантаження: ${WHITE}%s W${NC}\n" "$last_time" "$last_soc" "$BS" "$last_pwr"
+    printf " %s | АКБ: ${GREEN}%s %%${NC} | %b | Навантаження: ${WHITE}%s W${NC}\n" "${last_time:0:5}" "$last_soc" "$BS" "$last_pwr"
     draw_line "-" ""
 
-    # ВЕРХНЯ ЧАСТИНА (ЗЕЛЕНА - Споживання)
     for ((h=2; h>=1; h--)); do
         LABEL=$(( MAX_PWR * h / 2 ))
         printf "%5sW │ " "$LABEL"
@@ -75,8 +70,6 @@ while true; do
         for ((i=1; i<=POINTS_NEEDED; i+=2)); do
             v1=${pwr_history[$i]}; v2=${pwr_history[$((i+1))]}
             ty1=$(( v1 * 8 / MAX_PWR )); ty2=$(( v2 * 8 / MAX_PWR ))
-            [[ $v1 -gt 0 && $ty1 -eq 0 ]] && ty1=1
-            [[ $v2 -gt 0 && $ty2 -eq 0 ]] && ty2=1
             r_start=$(( (h-1) * 4 ))
             p1=$(( ty1 - r_start )); [[ $p1 -lt 0 ]] && p1=0; [[ $p1 -gt 4 ]] && p1=4
             p2=$(( ty2 - r_start )); [[ $p2 -lt 0 ]] && p2=0; [[ $p2 -gt 4 ]] && p2=4
@@ -85,54 +78,35 @@ while true; do
         echo -e "${GREEN}${row_str}${NC}"
     done
 
-    # ЦЕНТРАЛЬНА ВІСЬ (НУЛЬ)
     printf "    0W ├"
     printf "─%.0s" {1..$GRAPH_WIDTH}
     printf "\n"
 
-    # НИЖНЯ ЧАСТИНА (ДИНАМІЧНА - АКБ)
     for ((h=1; h<=2; h++)); do
         LABEL=$(( MAX_BAT * h / 2 ))
         printf "%5sW │ " "-$LABEL"
-        
-        # Малюємо посимвольно, щоб змінювати колір для заряду (+) та розряду (-)
         printf " "
         for ((i=1; i<=POINTS_NEEDED; i+=2)); do
             v1=${bat_history[$i]}; v2=${bat_history[$((i+1))]}
-            
-            # Визначаємо колір для поточної точки (пріоритет розряду, якщо дані змішані)
+            if [[ $v1 -eq 0 && $v2 -eq 0 ]]; then printf " "; continue; fi
             if [[ $v1 -lt 0 || $v2 -lt 0 ]]; then color=$RED; else color=$YELLOW; fi
             
-            # Працюємо з абсолютними значеннями для розрахунку висоти
-            av1=${v1#-}; av2=${v2#-}
-            ty1=$(( av1 * 8 / MAX_BAT )); ty2=$(( av2 * 8 / MAX_BAT ))
-            [[ $av1 -gt 0 && $ty1 -eq 0 ]] && ty1=1
-            [[ $av2 -gt 0 && $ty2 -eq 0 ]] && ty2=1
-            
+            ty1=$(( v1 * 8 / MAX_BAT )); ty2=$(( v2 * 8 / MAX_BAT ))
             r_start=$(( (2-h) * 4 ))
-            p1=$(( ty1 - r_start )); [[ $p1 -lt 0 ]] && p1=0; [[ $p1 -gt 4 ]] && p1=4
-            p2=$(( ty2 - r_start )); [[ $p2 -lt 0 ]] && p2=0; [[ $p2 -gt 4 ]] && p2=4
+            p1=$(( ty1 + r_start )); p2=$(( ty2 + r_start ))
             
-            if [[ $p1 -eq 0 && $p2 -eq 0 ]]; then
-                printf " "
-            else
-                printf "${color}${b[$p1$p2]}${NC}"
-            fi
+            p1_abs=$(( p1 < 0 ? -p1 : p1 )); [[ $p1_abs -gt 4 ]] && p1_abs=4
+            p2_abs=$(( p2 < 0 ? -p2 : p2 )); [[ $p2_abs -gt 4 ]] && p2_abs=4
+            
+            printf "${color}${b[$p1_abs$p2_abs]}${NC}"
         done
         printf "\n"
     done
-
-    # ТАЙМШТАМПИ
+    
     printf "       "
-    local last_print=-10
-    local step_time=12 
-    for ((i=1; i<=GRAPH_WIDTH; i++)); do
-        if [[ $(( i - last_print )) -ge $step_time && $(( GRAPH_WIDTH - i )) -gt 6 ]]; then
-            T_LABEL=${time_history[$((i*2))]}
-            [[ -n "$T_LABEL" ]] && printf "${GREY}▲${NC}${T_LABEL:0:5}" && last_print=$i && ((i+=5))
-        else
-            printf " "
-        fi
+    for ((i=0; i<GRAPH_WIDTH; i+=20)); do 
+        idx=$(( i * 2 + 1 ))
+        printf "%-20s" "${time_history[$idx]:0:5}" 
     done
     printf "\n"
     draw_line "=" ""

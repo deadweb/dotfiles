@@ -18,6 +18,7 @@ DEVICE_PARAMS = {
 }
 
 GRID_OFF_FLAG = Path("/tmp/inv_grid_off.flag")
+GRID_OFF_COUNTER = Path("/tmp/inv_grid_off_counter.val")
 LOG_FILE = Path.home() / ".local/bin/inverter_data.log"
 
 def get_inverter_data():
@@ -36,9 +37,7 @@ def get_inverter_data():
             d = data["dat"]
             res = {"load_w": 0, "bat_p_w": 0, "soc": 0, "grid_p_w": 0, "grid_v": 0}
 
-            # Збираємо всі статуси з різних блоків даних
             all_items = d.get("bc_status", []) + d.get("bt_status", []) + d.get("gd_status", [])
-
             for item in all_items:
                 p = item.get("par")
                 v = item.get("val", 0)
@@ -55,9 +54,8 @@ def get_inverter_data():
                     res["grid_p_w"] = int(val_float * 1000)
                 elif p in ["grid_voltage", "grid_voltage_v", "ac_input_voltage"]:
                     res["grid_v"] = val_float
-
             return res
-    except Exception:
+    except:
         return None
     return None
 
@@ -65,20 +63,33 @@ data = get_inverter_data()
 if not data:
     exit()
 
-# --- ЛОГІКА БЛЕКАУТУ ---
-# Світла немає, якщо напруга низька ТА споживання з мережі мізерне ТА йде розряд батареї.
-# Це дозволяє ігнорувати "шуми" у 37W, коли мережа насправді є.
-is_grid_down = (data["grid_v"] < 40 and data["grid_p_w"] <= 5) and (data["bat_p_w"] < -10)
+# --- ЛОГІКА БЛЕКАУТУ З ГІСТЕРЕЗИСОМ ---
+# Світла немає, якщо умови виконуються стабільно
+is_grid_down_now = (data["grid_v"] < 40 and data["grid_p_w"] <= 5) and (data["bat_p_w"] < -10)
 
-if is_grid_down:
+if GRID_OFF_COUNTER.exists():
+    counter = int(GRID_OFF_COUNTER.read_text())
+else:
+    counter = 0
+
+if is_grid_down_now:
+    counter = min(counter + 1, 10) # Обмежуємо лічильник
+else:
+    counter = 0
+GRID_OFF_COUNTER.write_text(str(counter))
+
+# Сповіщення спрацьовує на 5-му циклі
+if counter == 5:
     if not GRID_OFF_FLAG.exists():
         subprocess.run(["notify-send", "-u", "critical", "-a", "Inverter", "БЛЕКАУТ", "Мережа зникла. Робота від АКБ"])
         GRID_OFF_FLAG.touch()
-else:
-    # Сповіщення "Мережа OK" прийде лише якщо раніше був зафіксований блекаут
+elif counter == 0:
     if GRID_OFF_FLAG.exists():
         subprocess.run(["notify-send", "-a", "Inverter", "МЕРЕЖА OK", "Світло з'явилося"])
         GRID_OFF_FLAG.unlink(missing_ok=True)
+
+# Визначаємо статус для i3bar, спираючись на прапорець (Flag), а не на миттєве значення
+is_grid_down = GRID_OFF_FLAG.exists()
 
 # --- ЗАПИС ЛОГУ ---
 try:
@@ -87,7 +98,6 @@ try:
     with open(LOG_FILE, "a") as f:
         f.write(log_line)
     
-    # Ротація (остання доба)
     if LOG_FILE.exists():
         with open(LOG_FILE, "r") as f:
             lines = f.readlines()
