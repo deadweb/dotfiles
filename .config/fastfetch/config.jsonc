@@ -1,0 +1,107 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+	  "source": "debian",
+	  "color": { 
+		  "2":"red"
+	  }
+    },
+    "modules": [
+	    "title",
+	    "break",
+	    {
+		    "type": "os",
+		    "key": "󰏝 OS",
+		    "keyColor": "yellow"
+	    },
+	    {
+		    "type": "kernel",
+		    "key": "󰀚 Kernel",
+		    "keyColor": "yellow"
+        },
+        {
+            "type": "packages",
+            "key": "󰏖 Packages",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "shell",
+            "key": " Shell",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "localIP",
+            "key": "󰩟 Local IP",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "uptime",
+            "key": "󰅐 Uptime",
+            "keyColor": "yellow"
+        },
+            "break",
+        {
+            "type": "wm",
+            "key": "󰧨 Window Manager",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "lm",
+            "key": "󰧨 Login Manager",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "wmtheme",
+            "key": "󰉼 WM Theme",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "theme",
+            "key": "󰉼 Color Themes",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "icons",
+            "key": "󰸉 System Icons",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "font",
+            "key": " System Fonts",
+            "keyColor": "cyan"
+        },
+        {
+            "type": "terminal",
+            "key": " Terminal",
+            "keyColor": "cyan"
+        },
+            "break",
+        {
+            "type": "host",
+            "key": "󰌢 Host",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "display",
+            "key": "󰍹 Display",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "cpu",
+            "key": "󰻠 CPU",
+            "keyColor": "magenta",
+            "temp": true,
+            "freqNdigits": 1
+        },
+        {
+            "type": "gpu",
+            "key": "󰍛 GPU",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "disk",
+            "key": " Disk",
+            "keyColor": "magenta"
+        }
+  ]
+}
