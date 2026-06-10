@@ -120,3 +120,12 @@ function r() {
     fi
     rm -f -- "$temp_file"
 }
+
+# Відображення імені хоста, якщо ми в SSH
+if [ -n "$SSH_CONNECTION" ]; then
+    export PROMPT="%F{red}%n@%m%f:%~%# "
+else
+    export PROMPT="%F{green}%n@%m%f:%~%# "
+fi
+
+fastfetch

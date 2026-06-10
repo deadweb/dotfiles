@@ -12,26 +12,19 @@
 	    {
 		    "type": "os",
 		    "key": "󰏝 OS",
+		    "format": "{3}",
 		    "keyColor": "yellow"
 	    },
 	    {
 		    "type": "kernel",
 		    "key": "󰀚 Kernel",
+		    "format": "{2}",
 		    "keyColor": "yellow"
-        },
-        {
-            "type": "packages",
-            "key": "󰏖 Packages",
-            "keyColor": "yellow"
         },
         {
             "type": "shell",
             "key": " Shell",
-            "keyColor": "yellow"
-        },
-        {
-            "type": "localIP",
-            "key": "󰩟 Local IP",
+	    "format": "{1}",
             "keyColor": "yellow"
         },
         {
@@ -43,11 +36,7 @@
         {
             "type": "wm",
             "key": "󰧨 Window Manager",
-            "keyColor": "cyan"
-        },
-        {
-            "type": "lm",
-            "key": "󰧨 Login Manager",
+	    "format": "{1}",
             "keyColor": "cyan"
         },
         {
@@ -73,6 +62,7 @@
         {
             "type": "terminal",
             "key": " Terminal",
+	    "format": "{1}",
             "keyColor": "cyan"
         },
             "break",
@@ -89,19 +79,27 @@
         {
             "type": "cpu",
             "key": "󰻠 CPU",
+	    "format": "{1}",
             "keyColor": "magenta",
-            "temp": true,
+            "temp": false,
             "freqNdigits": 1
         },
         {
             "type": "gpu",
             "key": "󰍛 GPU",
+	    "format": "{3}",
             "keyColor": "magenta"
         },
         {
             "type": "disk",
             "key": " Disk",
             "keyColor": "magenta"
-        }
+        },
+	"break",
+	{
+		"type": "command",
+		"key": "󰞆 CrowdSec",
+		"text": "cscli alerts list --format json | jq '. | length'"
+	}
   ]
 }
