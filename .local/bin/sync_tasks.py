@@ -13,7 +13,7 @@ from datetime import datetime
 # --- КОНФІГУРАЦІЯ ---
 VAULT_PATH = "/home/user/Documents/.wiki"
 CREDENTIALS_JSON = "/home/user/.local/bin/credentials.json"
-DEFAULT_TAB_NAME = "Задачі"
+TAB_NAME = "Задачі"  # Назва аркушу зафіксована назавжди
 MIN_INTERVAL = 3600           
 PID_FILE = "/tmp/sync_tasks_obsidian.pid"
 
@@ -81,9 +81,10 @@ def sync_note_to_sheet(note_path, client):
     try:
         sheet = client.open_by_key(sheet_id)
         try:
-            worksheet = sheet.worksheet(DEFAULT_TAB_NAME)
+            # Завжди шукаємо або створюємо вкладку "Задачі"
+            worksheet = sheet.worksheet(TAB_NAME)
         except gspread.exceptions.WorksheetNotFound:
-            worksheet = sheet.add_worksheet(title=DEFAULT_TAB_NAME, rows=1000, cols=5)
+            worksheet = sheet.add_worksheet(title=TAB_NAME, rows=1000, cols=5)
 
         worksheet.clear()
         worksheet.append_row(["Статус", "Задача", "Завершено"])
@@ -108,7 +109,6 @@ def sync_note_to_sheet(note_path, client):
         if rows:
             worksheet.append_rows(rows, value_input_option='USER_ENTERED')
         
-        # Оновлений формат виводу
         log_message(f"[✓] {os.path.basename(note_path)}")
         return True
     except Exception as e:
@@ -119,6 +119,10 @@ def main():
     check_single_instance()
     if not check_interval():
         return
+
+    # Оновлюємо час модифікації логу на початку, щоб пусті запуски теж тримали інтервал
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        pass
 
     try:
         creds = Credentials.from_service_account_file(CREDENTIALS_JSON, scopes=scope)
