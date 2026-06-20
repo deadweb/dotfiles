@@ -45,6 +45,9 @@ def check_single_instance():
         f.write(str(os.getpid()))
 
 def check_interval():
+    # Якщо скрипт запущено з термінала з прапорцем --force, ігноруємо інтервал
+    if "--force" in sys.argv:
+        return True
     if os.path.exists(LOG_FILE):
         if time.time() - os.path.getmtime(LOG_FILE) < MIN_INTERVAL:
             return False
@@ -54,12 +57,12 @@ def read_frontmatter(path):
     with open(path, encoding='utf-8', errors='replace') as f:
         content = f.read()
     if content.startswith("---"):
-        parts = content.split('---', 2)
         try:
+            parts = content.split('---', 2)
             meta = yaml.safe_load(parts[1]) or {}
-        except:
-            meta = {}
-        return meta, parts[2]
+            return meta, parts[2]
+        except Exception:
+            return {}, content
     return {}, content
 
 def clean_task_text(text):
@@ -81,7 +84,6 @@ def sync_note_to_sheet(note_path, client):
     try:
         sheet = client.open_by_key(sheet_id)
         try:
-            # Завжди шукаємо або створюємо вкладку "Задачі"
             worksheet = sheet.worksheet(TAB_NAME)
         except gspread.exceptions.WorksheetNotFound:
             worksheet = sheet.add_worksheet(title=TAB_NAME, rows=1000, cols=5)
@@ -102,29 +104,39 @@ def sync_note_to_sheet(note_path, client):
             completed_date = ""
             match = re.search(r'✅\s*(\d{4}-\d{2}-\d{2})', text)
             if is_done and match:
-                completed_date = datetime.strptime(match.group(1), "%Y-%m-%d").strftime("%d.%m.%Y")
+                try:
+                    completed_date = datetime.strptime(match.group(1), "%Y-%m-%d").strftime("%d.%m.%Y")
+                except ValueError:
+                    completed_date = match.group(1)
 
             rows.append([status, clean_task_text(text), completed_date])
 
         if rows:
             worksheet.append_rows(rows, value_input_option='USER_ENTERED')
         
-        log_message(f"[✓] {os.path.basename(note_path)}")
+        log_message(f"[✓] Успішно синхронізовано: {os.path.basename(note_path)}")
         return True
     except Exception as e:
-        log_message(f"[X] Помилка {os.path.basename(note_path)}: {e}")
+        log_message(f"[X] Помилка API для {os.path.basename(note_path)}: {e}")
         return False
 
 def main():
     check_single_instance()
+    
     if not check_interval():
+        print("Пропущено: інтервал в 1 годину ще не минув. Використовуйте --force для запуску.")
         return
 
-    # Оновлюємо час модифікації логу на початку, щоб пусті запуски теж тримали інтервал
+    # Оновлюємо mtime логу ТІЛЬКИ якщо запуск легітимний (минула година або є --force)
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         pass
 
     try:
+        if not os.path.exists(CREDENTIALS_JSON):
+            log_message(f"[CRITICAL] Файл сервісного акаунта не знайдено: {CREDENTIALS_JSON}")
+            return
+
+        print("Підключення до Google API...")
         creds = Credentials.from_service_account_file(CREDENTIALS_JSON, scopes=scope)
         client = gspread.authorize(creds)
         
@@ -138,11 +150,13 @@ def main():
                         count += 1
 
         if count > 0:
-            log_message(f"--- Завершено. Оброблено: {count} ---")
+            log_message(f"--- Завершено успішно. Оброблено нотаток: {count} ---")
             subprocess.run(["notify-send", "-u", "low", " Синхронізація задач", f"Синхронізація успішна: {count} нотаток"])
+        else:
+            print("Жоден файл не було оновлено (можливо, помилки доступу до всіх API).")
             
     except Exception as e:
-        log_message(f"[CRITICAL] {e}")
+        log_message(f"[CRITICAL] Помилка ініціалізації: {e}")
     finally:
         if os.path.exists(PID_FILE):
             os.remove(PID_FILE)
