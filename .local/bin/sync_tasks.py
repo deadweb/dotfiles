@@ -14,7 +14,7 @@ from datetime import datetime
 VAULT_PATH = "/home/user/Documents/.wiki"
 CREDENTIALS_JSON = "/home/user/.local/bin/credentials.json"
 TAB_NAME = "Задачі"  # Назва аркушу зафіксована назавжди
-MIN_INTERVAL = 3600           
+MIN_INTERVAL = 3600
 PID_FILE = "/tmp/sync_tasks_obsidian.pid"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,6 +38,7 @@ def check_single_instance():
             with open(PID_FILE, 'r') as f:
                 pid = int(f.read().strip())
             os.kill(pid, 0)
+            print("Скрипт уже запущений в іншому процесі.")
             sys.exit(0)
         except (OSError, ValueError):
             os.remove(PID_FILE)
@@ -45,24 +46,24 @@ def check_single_instance():
         f.write(str(os.getpid()))
 
 def check_interval():
-    # Якщо скрипт запущено з термінала з прапорцем --force, ігноруємо інтервал
     if "--force" in sys.argv:
         return True
-    if os.path.exists(LOG_FILE):
+    if os.path.exists(LOG_FILE) and os.path.getsize(LOG_FILE) > 0:
         if time.time() - os.path.getmtime(LOG_FILE) < MIN_INTERVAL:
             return False
     return True
 
 def read_frontmatter(path):
-    with open(path, encoding='utf-8', errors='replace') as f:
-        content = f.read()
-    if content.startswith("---"):
-        try:
+    try:
+        with open(path, encoding='utf-8', errors='replace') as f:
+            content = f.read()
+        if content.startswith("---"):
             parts = content.split('---', 2)
-            meta = yaml.safe_load(parts[1]) or {}
-            return meta, parts[2]
-        except Exception:
-            return {}, content
+            if len(parts) >= 3:
+                meta = yaml.safe_load(parts[1]) or {}
+                return meta, parts[2]
+    except Exception as e:
+        log_message(f"[X] Помилка читання файлу {os.path.basename(path)}: {e}")
     return {}, content
 
 def clean_task_text(text):
@@ -125,15 +126,17 @@ def main():
     
     if not check_interval():
         print("Пропущено: інтервал в 1 годину ще не минув. Використовуйте --force для запуску.")
+        if os.path.exists(PID_FILE):
+            os.remove(PID_FILE)
         return
-
-    # Оновлюємо mtime логу ТІЛЬКИ якщо запуск легітимний (минула година або є --force)
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
-        pass
 
     try:
         if not os.path.exists(CREDENTIALS_JSON):
             log_message(f"[CRITICAL] Файл сервісного акаунта не знайдено: {CREDENTIALS_JSON}")
+            return
+
+        if not os.path.exists(VAULT_PATH):
+            log_message(f"[CRITICAL] Шлях до ваулту не існує: {VAULT_PATH}")
             return
 
         print("Підключення до Google API...")
@@ -150,10 +153,15 @@ def main():
                         count += 1
 
         if count > 0:
-            log_message(f"--- Завершено успішно. Оброблено нотаток: {count} ---")
-            subprocess.run(["notify-send", "-u", "low", " Синхронізація задач", f"Синхронізація успішна: {count} нотаток"])
+            log_message(f"Завершено успішно. Оброблено нотаток: {count}")
+            # Оновлюємо mtime файлу логу тільки після УСПІШНОЇ синхронізації
+            os.utime(LOG_FILE, None)
+            try:
+                subprocess.run(["notify-send", "-u", "low", "Синхронізація задач", f"Успішно: {count} нотаток"], check=False)
+            except FileNotFoundError:
+                pass
         else:
-            print("Жоден файл не було оновлено (можливо, помилки доступу до всіх API).")
+            print("Жоден файл не було оновлено або не знайдено міток sheet_id.")
             
     except Exception as e:
         log_message(f"[CRITICAL] Помилка ініціалізації: {e}")
