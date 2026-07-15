@@ -316,14 +316,6 @@ li.task-list-item ul.has-list-bullet {
     filter: invert(1) hue-rotate(180deg) brightness(2) !important;
 }
 
-/* 3. КОЛЬОРИ ЛІНІЙ (ПРИМУСОВИЙ АТРИБУТ) */
-.mermaid svg path[stroke] {
-    stroke-width: 3px !important;
-}
-.mermaid svg [data-index="0"] { stroke: #38bdf8 !important; }
-.mermaid svg [data-index="1"] { stroke: #fb923c !important; }
-.mermaid svg [data-index="2"] { stroke: #4ade80 !important; }
-
 /* Примусовий вплив на вже відрендерені SVG графіки */
 .mermaid svg path {
     filter: brightness(0.5) contrast(2.3) !important;
