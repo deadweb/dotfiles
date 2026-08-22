@@ -252,6 +252,7 @@ for_window [id="0x1200006"] floating enable, move scratchpad, resize set 140 480
 # Move windows to workspaces
 
 for_window [class="librewolf"] move to workspace $ws2
+for_window [class="firefox"] move to workspace $ws2
 for_window [class="Chromium"] layout tabbed, move to workspace $ws2
 
 for_window [class="obsidian"] layout tabbed, move to workspace $ws3 
