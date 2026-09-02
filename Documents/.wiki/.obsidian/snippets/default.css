@@ -303,20 +303,3 @@ li.task-list-item ul.has-list-bullet {
 .dataview.table-view-table tbody tr:last-child td {
     border-bottom: none !important;
 }
-
-/********************** Mermaid **************************/
-/* 1. ПОВНА ПРОЗОРІСТЬ ФОНУ */
-.mermaid svg { background: transparent !important; }
-.mermaid svg rect, .mermaid svg .background { fill: transparent !important; opacity: 0 !important; }
-
-/* 2. БІЛИЙ ТЕКСТ (ГЛОБАЛЬНА ІНВЕРСІЯ ТА ПРИМУСОВИЙ КОЛІР) */
-.mermaid svg text, 
-.mermaid svg tspan {
-    fill: #ffffff !important;
-    filter: invert(1) hue-rotate(180deg) brightness(2) !important;
-}
-
-/* Примусовий вплив на вже відрендерені SVG графіки */
-.mermaid svg path {
-    filter: brightness(0.5) contrast(2.3) !important;
-}
