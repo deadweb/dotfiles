@@ -82,6 +82,8 @@ ul ul ul ul::before {
   display: none !important;
 }
 
+/**************** Dataview ****************/
+
 /* Текст в Dataview inline */
 
 .markdown-preview-view span.dataview.inline-field-standalone-value {
@@ -94,6 +96,22 @@ ul ul ul ul::before {
   padding: 0 !important;
   /*margin: 0 !important;*/
   line-height: 1.6 !important;
+}
+
+/* Прибираємо верхні відступи блоків Dataview та DataviewJS */
+.block-language-dataview,
+.block-language-dataviewjs,
+.dataview.container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Прибираємо дефолтний margin у першого списку або абзацу всередині блоку */
+.block-language-dataview > *:first-child,
+.block-language-dataviewjs > *:first-child,
+.dataview-container > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 
 /* Збільшити відступ для блоків callout за покликанням */
@@ -303,3 +321,66 @@ li.task-list-item ul.has-list-bullet {
 .dataview.table-view-table tbody tr:last-child td {
     border-bottom: none !important;
 }
+
+/***************** Base *******************/
+
+/* 1. Приховуємо верхню панель керування */
+.base-view-header,
+.bases-view-header,
+.base-header,
+.bases-header,
+.ob-db-header {
+    display: none !important;
+}
+
+/* 2. Налаштування контейнера сітки */
+.block-language-base,
+.block-language-bases,
+.base-view,
+.bases-view,
+.bases-container,
+.bases-cards-container,
+.bases-cards,
+.base-cards,
+div[class*="cards"] {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    grid-template-rows: none !important;
+    grid-auto-rows: max-content !important;
+}
+
+/* 3. Оптимальна мінімальна висота картки */
+.bases-card,
+.base-card,
+div[class*="card"][style] {
+    height: auto !important;
+    min-height: 88px !important;
+    max-height: none !important;
+    padding-bottom: 8px !important;
+    overflow: visible !important;
+    contain: none !important;
+    clip-path: none !important;
+}
+
+/* 4. Внутрішній вміст */
+.bases-card *,
+.base-card * {
+    max-height: none !important;
+    overflow: visible !important;
+    contain: none !important;
+}
+
+/* 5. Приховуємо смуги прокрутки */
+.block-language-base ::-webkit-scrollbar,
+.block-language-bases ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.block-language-base,
+.block-language-bases {
+    scrollbar-width: none !important;
+}
+
