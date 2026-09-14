@@ -196,6 +196,27 @@ ul ul ul ul::before {
 }
 
 
+/************************** Base / Obsidian Database *******************************/
+
+.block-language-bases,
+.bases-container,
+.bases-view,
+.ob-db-container,
+div[class*="base"],
+div[class*="bases"] {
+  font-size: var(--font-text-size) !important;
+}
+
+.block-language-bases *,
+.bases-container *,
+.bases-view *,
+.ob-db-container *,
+div[class*="base"] *,
+div[class*="bases"] * {
+  font-size: var(--font-text-size) !important;
+}
+
+
 /************************** Задачі та кастомні статуси *******************************/
 
 /* Базовий контейнер елемента списку з фіксованим відступом для вирівнювання усіх рядків */
