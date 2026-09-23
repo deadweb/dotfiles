@@ -1,3 +1,10 @@
+██████╗ ██████╗ ███████╗██╗██████╗ ██╗ █████╗ ███╗   ██╗
+██╔═══██╗██╔══██╗██╔════╝██║██╔══██╗██║██╔══██╗████╗  ██║
+██║   ██║██████╔╝███████╗██║██║  ██║██║███████║██╔██╗ ██║
+██║   ██║██╔══██╗╚════██║██║██║  ██║██║██╔══██║██║╚██╗██║
+╚██████╔╝██████╔╝███████║██║██████╔╝██║██║  ██║██║ ╚████║
+ ╚═════╝ ╚═════╝ ╚══════╝╚═╝╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
 /************************** Таблиці *******************************/
 
 /* Зменшує відступи перед і після таблиць */
@@ -351,4 +358,60 @@ span.task-extras {
   content: "Завдання";
   font-size: var(--font-text-size);
   font-weight: bold;
+}
+
+/*************************** Mermaid ********************************/
+
+body.theme-dark .mermaid svg .node rect,
+body.theme-dark .mermaid svg .node polygon,
+body.theme-dark .mermaid svg .node circle,
+body.theme-dark .mermaid svg .node ellipse,
+body.theme-dark .mermaid svg .node path {
+    fill: #ababab !important;
+    stroke: #888888 !important;
+}
+
+body.theme-dark .mermaid svg .node foreignObject,
+body.theme-dark .mermaid svg .node foreignObject div,
+body.theme-dark .mermaid svg .node foreignObject span,
+body.theme-dark .mermaid svg .node text,
+body.theme-dark .mermaid svg .label {
+    background-color: transparent !important;
+    fill: #141414 !important;
+    color: #141414 !important;
+}
+
+body.theme-dark .mermaid svg g.cluster rect {
+    fill: #c9c9c9 !important;
+    stroke: #737373 !important;
+}
+
+body.theme-dark .mermaid svg g.cluster text,
+body.theme-dark .mermaid svg g.cluster span,
+body.theme-dark .mermaid svg g.cluster foreignObject div,
+body.theme-dark .mermaid svg g.cluster foreignObject span {
+    fill: #141414 !important;
+    color: #141414 !important;
+    font-weight: normal !important;
+}
+
+body.theme-dark .mermaid svg .edgePath path.path {
+    stroke: #888888 !important;
+}
+
+body.theme-dark .mermaid svg marker path {
+    fill: #888888 !important;
+    stroke: #888888 !important;
+}
+
+.mermaid {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.mermaid svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
 }
