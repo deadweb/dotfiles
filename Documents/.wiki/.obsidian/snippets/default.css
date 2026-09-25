@@ -210,19 +210,10 @@ ul ul ul ul::before {
 .bases-view,
 .ob-db-container,
 div[class*="base"],
-div[class*="bases"] {
-  font-size: var(--font-text-size) !important;
+div[class*="bases"],
+.bases-view * {
+    font-size: 0.97em !important;
 }
-
-.block-language-bases *,
-.bases-container *,
-.bases-view *,
-.ob-db-container *,
-div[class*="base"] *,
-div[class*="bases"] * {
-  font-size: var(--font-text-size) !important;
-}
-
 
 /************************** Задачі та кастомні статуси *******************************/
 
@@ -415,3 +406,6 @@ body.theme-dark .mermaid svg marker path {
     max-width: 100% !important;
     height: auto !important;
 }
+
+/******************************** Base ***********************/
+
