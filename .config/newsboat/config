@@ -1,0 +1,49 @@
+# Шлях до браузера за замовчуванням (клавіша 'o')
+browser "qutebrowser %u"
+
+# Автоматично оновлювати стрічки кожні 30 хвилин
+auto-reload yes
+reload-time 30
+
+# Збереження історії та чистка прочитаного
+max-items 100
+
+# Відображення та форматування
+show-read-feeds no
+feedlist-format "%4i %n %t %u"
+articlelist-format "%4i %f %D %a %t"
+
+# Vim-навігація (зазвичай включена за замовчуванням)
+bind-key j down
+bind-key k up
+bind-key h quit
+bind-key l open
+
+# Показувати тільки лічильник непрочитаних замість "Newsboat 2.x.x"
+feedlist-title-format "Feeds (%u unread)"
+articlelist-title-format "Articles (%u unread)"
+searchresult-title-format "Search Results (%u unread)"
+
+# --- КОЛЬОРОВА СХЕМА ---
+# Формат: color <елемент> <текст> <тло> [атрибути...]
+
+# Загальний фон та стандартний текст
+color background          default        default
+color listnormal          color250       default
+color listnormal_unread   color14        default        bold
+
+# Виділений рядок (курсор)
+color listfocus           color235       color14        bold
+color listfocus_unread    color235       color201       bold
+
+# Верхній та нижній статус-бари
+color info                color14        color235       bold
+color article             color252       default
+
+# Виділення всередині статей (заголовки, посилання, цитати)
+highlight article "^Feed:.*"             color201 default bold
+highlight article "^Title:.*"            color14  default bold
+highlight article "^Author:.*"           color220 default
+highlight article "^Link:.*"             color39  default underline
+highlight article "https?://[^ ]+"      color39  default underline
+highlight article "^Starting time:.*"   color220 default
