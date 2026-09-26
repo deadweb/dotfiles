@@ -1,5 +1,14 @@
+#╔═══════════════════════════════════════════════╗
+#║                                               ║
+#║   _  _ _____ _  _ _____ ___  ____  ____ _____ ║
+#║   |\ | |____ |  | |____ |__] |  |  |__|   |   ║
+#║   | \| |____ |__| |____ |__| |__|  |  |   |   ║
+#║                                               ║
+#╚═══════════════════════════════════════════════╝
+
+
 # Шлях до браузера за замовчуванням (клавіша 'o')
-browser "qutebrowser %u"
+browser "xdg-open %u &"
 
 # Автоматично оновлювати стрічки кожні 30 хвилин
 auto-reload yes
@@ -24,8 +33,36 @@ feedlist-title-format "Feeds (%u unread)"
 articlelist-title-format "Articles (%u unread)"
 searchresult-title-format "Search Results (%u unread)"
 
+# Фільтруємо дрібний шум або рекламу за ключовими словами
+ignore-article "*" "title =~ \"скидки|знижки|акція|розпродаж\""
+
+# Автоматичне підсвічування важливих кібер-тем (Zero-Day, Vuln, AI)
+highlight article "0-day|zero-day|exploit|vulnerability" color201 default bold
+highlight article "AI|LLM|Neural" color14 default bold
+
+# Використовувати html2text для рендерингу
+html-renderer "html2text -utf8 -width 80"
+
+# Відображати лише назву фіда
+feedlist-format " - %t %u"
+
+# Відображати лише назву новини у списку статей
+articlelist-format " - %t"
+
 # --- КОЛЬОРОВА СХЕМА ---
 # Формат: color <елемент> <текст> <тло> [атрибути...]
+
+# Прочитані новини — тьмяні темно-сірі
+color listnormal color242 default dim
+
+# Непрочитані новини — яскравий неоновий циан + жирний шрифт
+color listnormal_unread cyan default bold
+
+# Фокус (курсор) на прочитаній новині
+color listfocus black cyan bold
+
+# Фокус (курсор) на непрочитаній новині — неонова маджента
+color listfocus_unread black magenta bold
 
 # Загальний фон та стандартний текст
 color background          default        default

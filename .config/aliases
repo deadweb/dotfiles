@@ -49,6 +49,7 @@ alias inverter='$HOME/.local/bin/inverter.sh'
 alias m4a2mp3='for f in *.m4a; do ffmpeg -y -i "$f" -codec:a libmp3lame -qscale:a 2 "${f%.m4a}.mp3" && rm -f "$f"; done'
 alias opus2mp3='for f in *.opus; do ffmpeg -y -i "$f" -codec:a libmp3lame -qscale:a 2 "${f%.opus}.mp3" && rm -f "$f"; done'
 alias netscan='$HOME/.local/bin/netscan.sh'
+alias news='newsboat'
 
 ## Files
 
@@ -70,3 +71,5 @@ alias vimrc='vim ~/.vimrc'
 alias zathurarc='vim ~/.config/zathura/zathurarc'
 alias zshrc='vim ~/.zshrc'
 alias snippets='vim ~/Documents/.wiki/.obsidian/snippets/default.css'
+alias feeds='vim ~/.config/newsboat/urls'
+alias newsconf='vim ~/.config/newsboat/config'
