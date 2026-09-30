@@ -15,7 +15,6 @@
   max-width: 100%;
 }
 
-
 /************************** Зображення *******************************/
 
 /* Всі зображення у нотатках Obsidian */
@@ -28,10 +27,7 @@
   object-fit: contain;
 }
 
-
-/********************************************************************/
 /************************** Footnotes *******************************/
-/********************************************************************/
 
 /* Приховати лінію перед примітками */
 hr.footnotes-sep,
@@ -121,7 +117,6 @@ ul ul ul ul::before {
   display: none !important;
 }
 
-
 /************************** Dataview *******************************/
 
 /* Текст в Dataview inline */
@@ -202,17 +197,22 @@ ul ul ul ul::before {
   border-bottom: none !important;
 }
 
-
 /************************** Base / Obsidian Database *******************************/
 
-.block-language-bases,
-.bases-container,
 .bases-view,
-.ob-db-container,
-div[class*="base"],
-div[class*="bases"],
-.bases-view * {
-    font-size: 0.97em !important;
+.block-language-bases,
+[class*="bases"],
+[class*="database"],
+[class*="db-table"] {
+  font-size: 0.97em !important;
+}
+
+.bases-view *,
+.block-language-bases *,
+[class*="bases"] *,
+[class*="database"] *,
+[class*="db-table"] * {
+  font-size: inherit;
 }
 
 /************************** Задачі та кастомні статуси *******************************/
