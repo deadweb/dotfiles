@@ -8,6 +8,7 @@
 # Commands
 
 #alias ls='~/.local/bin/ls'
+alias rm='trash-put'
 #alias tar='tar -cvf'
 #alies unzip="unzip x"
 alias ar='sudo apt autoremove'

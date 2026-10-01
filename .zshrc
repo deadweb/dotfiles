@@ -128,4 +128,17 @@ else
     export PROMPT="%F{green}%n@%m%f:%~%# "
 fi
 
+# Функція для очищення екрана та запуску fetch
+clear-and-fetch() {
+    clear
+    fastfetch   # або neofetch / pfetch
+    zle reset-prompt
+}
+
+# Реєстрація віджета в ZLE
+zle -N clear-and-fetch
+
+# Прив'язка до Ctrl+L
+bindkey '^L' clear-and-fetch
+
 fastfetch
