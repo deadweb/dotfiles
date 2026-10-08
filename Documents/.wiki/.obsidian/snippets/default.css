@@ -197,24 +197,6 @@ ul ul ul ul::before {
   border-bottom: none !important;
 }
 
-/************************** Base / Obsidian Database *******************************/
-
-.bases-view,
-.block-language-bases,
-[class*="bases"],
-[class*="database"],
-[class*="db-table"] {
-  font-size: 0.97em !important;
-}
-
-.bases-view *,
-.block-language-bases *,
-[class*="bases"] *,
-[class*="database"] *,
-[class*="db-table"] * {
-  font-size: inherit;
-}
-
 /************************** Задачі та кастомні статуси *******************************/
 
 /* Базовий контейнер елемента списку з фіксованим відступом для вирівнювання усіх рядків */
