@@ -304,6 +304,24 @@ span.task-extras {
   .internal-embed {
     margin-bottom: -1em !important;
   }
+  .mermaid {
+    display: block !important;
+    width: 100% !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    padding-top: 20px !important;
+  }
+  .mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  /* Фікс кольору тексту в легенді та заголовках при друці (на білому тлі) */
+  .mermaid svg .pieTitleText,
+  .mermaid svg .pieLegendText,
+  .mermaid svg text {
+    fill: #000000 !important;
+  }
 }
 
 @media screen {
@@ -384,16 +402,30 @@ body.theme-dark .mermaid svg marker path {
 }
 
 .mermaid {
-    width: 100% !important;
+    /*width: 90% !important;*/
     display: flex !important;
     justify-content: center !important;
+    background-color: transparent !important;
 }
 
 .mermaid svg {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
+    overflow: visible !important;
 }
 
-/******************************** Base ***********************/
+/* Корекція контрастності та меж кругових діаграм (pie) у темній темі */
+body.theme-dark .mermaid svg .pieCircle {
+    stroke: var(--background-primary) !important;
+    stroke-width: 2px !important;
+}
+
+body.theme-dark .mermaid svg .pieTitleText {
+    fill: var(--text-normal) !important;
+}
+
+body.theme-dark .mermaid svg .pieLegendText {
+    fill: var(--text-normal) !important;
+}
 
