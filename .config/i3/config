@@ -306,6 +306,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -g # Доз�
 exec --no-startup-id ~/.local/bin/terminals_layout
 exec --no-startup-id udiskie -t
 exec --no-startup-id snixembed # Міст трею для Viber
+exec --no-startup-id export MESA_LOADER_DRIVER_OVERRIDE=i965
 # Автозапуск сховища ключів для Chromium/Chrome
 exec --no-startup-id gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 exec --no-startup-id ~/.config/i3/start_layout.sh
