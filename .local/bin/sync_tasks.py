@@ -10,13 +10,14 @@ import subprocess
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-# --- КОНФІГУРАЦІЯ ---
 VAULT_PATH = "/home/user/Documents/.wiki"
 CREDENTIALS_JSON = "/home/user/.local/bin/credentials.json"
 TASKS_TAB_NAME = "Задачі"
 PROJECTS_TAB_NAME = "Проєкти"
 MIN_INTERVAL = 3600
 PID_FILE = "/tmp/sync_tasks_obsidian.pid"
+
+GOOGLE_ADS_SHEET_ID = "1u3VzorSGj1K1ibTlMAKugy2x9q0hmS7-hrxDRQlPJHg"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_FILE = os.path.join(SCRIPT_DIR, "sync_tasks.log")
@@ -37,6 +38,12 @@ def log_message(message):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] {message}\n")
     print(message)
+    
+    if "[X]" in message or "[CRITICAL]" in message:
+        try:
+            subprocess.run(["notify-send", "-u", "critical", "Помилка синхронізації", message], check=False)
+        except FileNotFoundError:
+            pass
 
 def check_single_instance():
     if os.path.exists(PID_FILE):
@@ -76,13 +83,13 @@ def extract_sheet_id(meta):
     sheet_id = meta.get("sheet_id")
     if sheet_id:
         return str(sheet_id).strip()
-    
+
     case_url = meta.get("case")
     if case_url and isinstance(case_url, str):
         match = re.search(r'/d/([a-zA-Z0-9-_]+)', case_url)
         if match:
             return match.group(1)
-            
+
     return None
 
 def is_active_note(meta):
@@ -123,10 +130,10 @@ def clean_val(val):
 def format_budget(meta):
     budget_raw = meta.get("budget")
     currency_raw = meta.get("currency", "")
-    
+
     if budget_raw is None or budget_raw == "":
         return ""
-    
+
     try:
         daily_budget = float(budget_raw)
         monthly_budget = int(daily_budget * 30)
@@ -136,7 +143,6 @@ def format_budget(meta):
         return clean_val(budget_raw)
 
 def sync_tasks_for_note(sheet, content):
-    """Вивантажує списки задач нотатки в аркуш 'Задачі'."""
     try:
         try:
             worksheet = sheet.worksheet(TASKS_TAB_NAME)
@@ -151,11 +157,11 @@ def sync_tasks_for_note(sheet, content):
             line = line.strip()
             if not re.match(r'^(> *)?- \[[ xX]\]', line):
                 continue
-            
+
             is_done = "[x]" in line.lower()
             status = "✅" if is_done else "❌"
             text = re.sub(r'^(> *)?- \[[ xX]\]\s*(#task\s*)?', '', line)
-            
+
             completed_date = ""
             match = re.search(r'✅\s*(\d{4}-\d{2}-\d{2})', text)
             if is_done and match:
@@ -168,16 +174,12 @@ def sync_tasks_for_note(sheet, content):
 
         if rows:
             worksheet.append_rows(rows, value_input_option='USER_ENTERED')
-            
+
         return True
     except Exception as e:
         return False
 
 def sync_projects_smart_update(sheet, projects_data):
-    """
-    Оновлює аркуш 'Проєкти' без повного перезапису.
-    Автоматично виявляє та доповнює відсутні колонки в заголовку.
-    """
     try:
         try:
             worksheet = sheet.worksheet(PROJECTS_TAB_NAME)
@@ -220,7 +222,7 @@ def sync_projects_smart_update(sheet, projects_data):
             new_table_rows.append(row_cells)
 
         worksheet.update(range_name="A1", values=new_table_rows, value_input_option='USER_ENTERED')
-        
+
         if len(all_values) > len(new_table_rows):
             empty_tail = [[""] * len(headers)] * (len(all_values) - len(new_table_rows))
             start_clear_row = len(new_table_rows) + 1
@@ -231,7 +233,7 @@ def sync_projects_smart_update(sheet, projects_data):
 
 def main():
     check_single_instance()
-    
+
     if not check_interval():
         print("Пропущено: інтервал в 1 годину ще не минув. Використовуйте --force для запуску.")
         if os.path.exists(PID_FILE):
@@ -252,18 +254,17 @@ def main():
         client = gspread.authorize(creds)
 
         all_files = [f for f in os.listdir(VAULT_PATH) if f.endswith(".md")]
-        
+
         agency_sheets = {}
         project_notes = []
         tasks_count = 0
 
-        # КРОК 1: Задачі
         for file in all_files:
             path = os.path.join(VAULT_PATH, file)
             meta, content = read_frontmatter(path)
-            
+
             sheet_id = extract_sheet_id(meta)
-            
+
             if sheet_id:
                 names = [file.replace(".md", "")]
                 if meta.get("name"):
@@ -274,7 +275,7 @@ def main():
                         names.extend([str(a) for a in aliases])
                     else:
                         names.append(str(aliases))
-                
+
                 for name in names:
                     agency_sheets[name.strip().lower()] = sheet_id
 
@@ -289,28 +290,40 @@ def main():
 
             project_notes.append((meta, file))
 
-        # КРОК 2: Проєкти
         table_data = {}
+        processed_project_names = set()
 
         for meta, note_file in project_notes:
-            company_raw = meta.get("company")
-            if not company_raw:
+            category_raw = meta.get("category")
+            category_clean = clean_val(category_raw)
+
+            if category_clean != "Проєкти Google Ads" and not is_active_note(meta):
                 continue
 
-            company_variants = parse_company_variants(company_raw)
-            
+            company_raw = meta.get("company")
             target_sheet_id = None
-            for variant in company_variants:
-                if variant in agency_sheets:
-                    target_sheet_id = agency_sheets[variant]
-                    break
+
+            if category_clean == "Проєкти Google Ads":
+                target_sheet_id = GOOGLE_ADS_SHEET_ID
+            elif company_raw:
+                company_variants = parse_company_variants(company_raw)
+                for variant in company_variants:
+                    if variant in agency_sheets:
+                        target_sheet_id = agency_sheets[variant]
+                        break
 
             if target_sheet_id:
+                proj_name = clean_val(meta.get("name", note_file.replace(".md", "")))
+
+                if proj_name in processed_project_names:
+                    continue
+                processed_project_names.add(proj_name)
+
                 if target_sheet_id not in table_data:
                     table_data[target_sheet_id] = []
 
                 proj_dict = {
-                    "name": clean_val(meta.get("name", note_file.replace(".md", ""))),
+                    "name": proj_name,
                     "status": clean_val(meta.get("status", "Активно")),
                     "account_id": clean_val(meta.get("account_id")),
                     "site": clean_val(meta.get("site")),
@@ -331,15 +344,22 @@ def main():
             except Exception as e:
                 log_message(f"[X] Помилка оновлення проєктів ({sheet_id}): {e}")
 
-        if tasks_count > 0:
-            log_message(f"Завершено успішно. Оброблено нотаток: {tasks_count}")
+        total_projects = sum(len(projects) for projects in table_data.values())
+        active_projects_count = sum(
+            1 for projects in table_data.values() 
+            for proj in projects 
+            if proj.get("status", "").strip().lower() == "активно"
+        )
+
+        if total_projects > 0:
+            log_message(f"Завершено успішно. Оновлено проєктів: {active_projects_count}/{total_projects}")
             os.utime(LOG_FILE, None)
             try:
-                subprocess.run(["notify-send", "-u", "low", "Синхронізація задач", f"Успішно: {tasks_count} нотаток"], check=False)
+                subprocess.run(["notify-send", "-u", "low", "Синхронізація задач", f"Активних проєктів: {active_projects_count}"], check=False)
             except FileNotFoundError:
                 pass
         else:
-            print("Жоден файл не було оновлено (немає активних нотаток із sheet_id/case).")
+            print("Жоден файл не було оновлено.")
 
     except Exception as e:
         log_message(f"[CRITICAL] Помилка ініціалізації: {e}")
