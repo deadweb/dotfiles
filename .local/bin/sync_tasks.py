@@ -295,15 +295,17 @@ def main():
 
         for meta, note_file in project_notes:
             category_raw = meta.get("category")
-            category_clean = clean_val(category_raw)
+            category_clean = clean_val(category_raw).lower()
 
-            if category_clean != "Проєкти Google Ads" and not is_active_note(meta):
+            is_google_ads_project = "проєкти google ads" in category_clean or "проекти google ads" in category_clean
+
+            if not is_google_ads_project and not is_active_note(meta):
                 continue
 
             company_raw = meta.get("company")
             target_sheet_id = None
 
-            if category_clean == "Проєкти Google Ads":
+            if is_google_ads_project:
                 target_sheet_id = GOOGLE_ADS_SHEET_ID
             elif company_raw:
                 company_variants = parse_company_variants(company_raw)
