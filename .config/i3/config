@@ -17,7 +17,7 @@ set $mod Mod4
 
 #set $refresh_i3status killall -SIGUSR1 i3status
 
-set $wallpaper $HOME/.config/i3/x220.png
+set $wallpaper $HOME/.config/i3/x280.png
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -112,11 +112,15 @@ bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/volume.sh down
 #bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/.local/bin/dunstify-volume.sh
 bindsym XF86AudioMute exec --no-startup-id ~/.local/bin/volume.sh mute
 #bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && ~/.local/bin/dunstify-volume.sh
-bindsym XF86AudioMicMute exec --no-startup-id ~/.local/bin/volume.sh micmute
+#bindsym XF86AudioMicMute exec --no-startup-id ~/.local/bin/volume.sh micmute
+exec_always --no-startup-id sh -c 'pkill -f "evtest /dev/input/event10" 2>/dev/null; exec stdbuf -oL evtest /dev/input/event10 | while read -r line; do case "$line" in *"code 248 (KEY_MICMUTE), value 1"*) pactl set-source-mute alsa_input.pci-0000_00_1f.3.analog-stereo toggle && (pactl get-source-mute alsa_input.pci-0000_00_1f.3.analog-stereo | grep -q yes && brillo -k -s platform::micmute -S 100 || brillo -k -s platform::micmute -S 0) ;; esac; done'
 
 ### / Управління яскравістю екрана
 bindsym XF86MonBrightnessDown exec --no-startup-id brillo -q -U 5
 bindsym XF86MonBrightnessUp exec --no-startup-id brillo -q -A 5
+
+### Управлінн яскравістю клавіатури
+bindsym Ctrl+Space exec --no-startup-id sh -c 'cur=$(cat /sys/class/leds/tpacpi::kbd_backlight/brightness); next=$(( (cur + 1) % 3 )); brillo -k -s "tpacpi::kbd_backlight" -S $((next * 50))'
 
 ### / Управління музичним плеером
 bindsym XF86AudioNext exec mpc next
