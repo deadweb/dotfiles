@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+  printf "%s\n" \
+    "Battery (powersave)" \
+    "AC (balanced)" \
+    "Lock screen" \
+    "Suspend" \
+    "Reboot" \
+    "Shutdown"
+  exit 0
+fi
+
+case "$1" in
+  "Battery (powersave)")
+    coproc ( sudo /usr/sbin/tlp bat >/dev/null 2>&1 )
+    ;;
+  "AC (balanced)")
+    coproc ( sudo /usr/sbin/tlp ac >/dev/null 2>&1 )
+    ;;
+  "Lock screen")
+    coproc ( i3lock >/dev/null 2>&1 )
+    ;;
+  "Suspend")
+    coproc ( systemctl suspend >/dev/null 2>&1 )
+    ;;
+  "Reboot")
+    coproc ( systemctl reboot >/dev/null 2>&1 )
+    ;;
+  "Shutdown")
+    coproc ( systemctl poweroff >/dev/null 2>&1 )
+    ;;
+esac

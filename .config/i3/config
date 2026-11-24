@@ -300,10 +300,10 @@ exec_always --no-startup-id xset -dpms
 # Exec
 #exec --no-startup-id nm-applet
 exec --no-startup-id udiskie &
-exec --no-startup-id element-desktop
+exec --no-startup-id XDG_CURRENT_DESKTOP=GNOME element-desktop
 exec --no-startup-id keepassxc
 exec --no-startup-id obsidian
-exec --no-startup-id thunderbird
+#exec --no-startup-id thunderbird
 exec --no-startup-id zotero
 #exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -g # Дозволяє блокувати при переході в сон (кришка ноутбука)

@@ -100,7 +100,6 @@ convert_html_entity() {
             "&#x25;") echo "%" ;;
             "&#xf0e7;") echo "⚡" ;;
             "&#xf128;") echo "?" ;;
-            "&#xf254;") echo "⏳" ;;
             "&#xf00d;") echo "✕" ;;
             "&#xf071;") echo "⚠" ;;
             "&#xf240;") echo "█" ;;
@@ -125,7 +124,6 @@ if ! $_SUPPRESS_SYMBOLS; then
         _SYMBOL_CHARGING=${_SYMBOL_CHARGING:-"⚡"}
         _SYMBOL_DISCHARGING=${_SYMBOL_DISCHARGING:-""}
         _SYMBOL_UNKNOWN=${_SYMBOL_UNKNOWN:-"?"}
-        _SYMBOL_PENDING=${_SYMBOL_PENDING:-"⏳"}
         _SYMBOL_ERROR=${_SYMBOL_ERROR:-"✕"}
         _SYMBOL_ALERT=${_SYMBOL_ALERT:-"⚠"}
         _SYMBOL_BATT_100=${_SYMBOL_BATT_100:-"█"}
@@ -141,7 +139,6 @@ if ! $_SUPPRESS_SYMBOLS; then
         _SYMBOL_CHARGING=${_SYMBOL_CHARGING:-"&#xf0e7;"}
         _SYMBOL_DISCHARGING=${_SYMBOL_DISCHARGING:-""}
         _SYMBOL_UNKNOWN=${_SYMBOL_UNKNOWN:-"&#xf128;"}
-        _SYMBOL_PENDING=${_SYMBOL_PENDING:-"&#xf254;"}
         _SYMBOL_ERROR=${_SYMBOL_ERROR:-"&#xf00d;"}
         _SYMBOL_ALERT=${_SYMBOL_ALERT:-"&#xf071;"}
         _SYMBOL_BATT_100=${_SYMBOL_BATT_100:-"&#xf240;"}
@@ -157,7 +154,6 @@ if ! $_SUPPRESS_SYMBOLS; then
     _SYMBOL_CHARGING=$(convert_html_entity "$_SYMBOL_CHARGING")
     _SYMBOL_DISCHARGING=$(convert_html_entity "$_SYMBOL_DISCHARGING")
     _SYMBOL_UNKNOWN=$(convert_html_entity "$_SYMBOL_UNKNOWN")
-    _SYMBOL_PENDING=$(convert_html_entity "$_SYMBOL_PENDING")
     _SYMBOL_ERROR=$(convert_html_entity "$_SYMBOL_ERROR")
     _SYMBOL_ALERT=$(convert_html_entity "$_SYMBOL_ALERT")
     _SYMBOL_BATT_100=$(convert_html_entity "$_SYMBOL_BATT_100")
