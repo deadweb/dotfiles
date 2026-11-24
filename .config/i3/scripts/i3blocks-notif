@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+case "${BLOCK_BUTTON:-}" in
+  1)
+    dunstctl set-paused toggle >/dev/null 2>&1
+    ;;
+esac
+
+if [ "$(dunstctl is-paused 2>/dev/null)" = "true" ]; then
+  printf '<span foreground="#ff5555"></span>\n'
+fi

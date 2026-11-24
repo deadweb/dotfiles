@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+updates=$(apt list --upgradable 2>/dev/null | grep -cv '^Listing\.\.\.')
+
+if [ -z "$updates" ] || [ "$updates" -le 0 ]; then
+  exit 0
+fi
+
+printf "%s\n" "$updates"
+printf "%s\n" "$updates"
