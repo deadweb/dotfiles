@@ -7,6 +7,8 @@ export PATH=$PATH:/usr/sbin
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 
+typeset -U path PATH
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -113,8 +115,6 @@ if [ -f ~/.config/aliases ]; then
 fi
 
 # Created by `pipx` on 2026-01-29 05:07:38
-export PATH="$PATH:/home/user/.local/bin"
-
 
 function r() {
     temp_file="$(mktemp -t "ranger_cd.XXXXXXXXXX")"
@@ -146,3 +146,4 @@ zle -N clear-and-fetch
 bindkey '^L' clear-and-fetch
 
 fastfetch
+export PATH="$HOME/.local/bin:$PATH"
